@@ -43,7 +43,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void screenRedirect() async {
     var prefs = await SharedPreferences.getInstance();
-    uuidValue = prefs.getString("uuid")!;
+    uuidValue = "";
+    if (prefs.getString("uuid") != null) {
+      uuidValue = prefs.getString("uuid")!;
+    }
 
     Timer(const Duration(seconds: 2), () {
       if (uuidValue.isNotEmpty) {

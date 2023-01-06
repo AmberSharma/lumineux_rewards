@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lumineux_rewards_app/AddReceiptProject.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'showCustomDialogPopup.dart';
+import 'package:lumineux_rewards_app/Contactus.dart';
+import 'package:lumineux_rewards_app/HowItWorks.dart';
+import 'CommonAppBar.dart';
 import 'package:lumineux_rewards_app/BaseConstants.dart';
+import 'CommonBottomNavigationBar.dart';
 import 'RewardList.dart';
 
 class Dashboard extends StatelessWidget {
@@ -26,40 +27,11 @@ class InitScreen extends StatefulWidget {
 }
 
 class _InitScreenState extends State<InitScreen> {
-  static const String POINTS = "points";
-  var pointsValue = "";
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getPoints();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.add_circle),
-              onPressed: () async {
-                await showCustomDialogPopup<String?>(
-                    context, const AddReceiptProject());
-              },
-            );
-          },
-        ),
-        backgroundColor: Colors.lightGreen[900],
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add_alert),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: const CommonAppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -105,7 +77,13 @@ class _InitScreenState extends State<InitScreen> {
                     icon: const Icon(Icons.contact_support),
                     iconSize: 100.0,
                     color: Colors.green,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HowItWorks()),
+                      );
+                    },
                   ),
                   const Text(BaseConstants.howItWorksLabel),
                 ],
@@ -116,7 +94,13 @@ class _InitScreenState extends State<InitScreen> {
                     icon: const Icon(Icons.support_agent),
                     iconSize: 100.0,
                     color: Colors.green,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Contactus()),
+                      );
+                    },
                   ),
                   const Text(BaseConstants.contactUsLabel),
                 ],
@@ -129,64 +113,7 @@ class _InitScreenState extends State<InitScreen> {
           // )
         ],
       ),
-      bottomNavigationBar: SizedBox(
-        height: 80.0,
-        child: BottomAppBar(
-          color: Colors.lightGreen[800],
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.home_filled),
-                    iconSize: 25.0,
-                    color: Colors.white,
-                    onPressed: () {},
-                  ),
-                  const Text(BaseConstants.homeLabel),
-                ],
-              ),
-              FloatingActionButton.extended(
-                onPressed: () {
-                  // Add your onPressed code here!
-                },
-                label: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      pointsValue,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Text(
-                      BaseConstants.pointsLabel,
-                      style: TextStyle(
-                        color: Colors.lightGreen,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                backgroundColor: Colors.white,
-              ),
-              Column(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.account_circle),
-                    iconSize: 25.0,
-                    color: Colors.white,
-                    onPressed: () {},
-                  ),
-                  const Text(BaseConstants.youLabel),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+      bottomNavigationBar: const CommonBottomNavigationBar(),
       // drawer: Drawer(
       //   child: Row(
       //     children: [
@@ -216,12 +143,5 @@ class _InitScreenState extends State<InitScreen> {
       //   ),
       // ),
     );
-  }
-
-  void getPoints() async {
-    var prefs = await SharedPreferences.getInstance();
-    setState(() {
-      pointsValue = prefs.getString("points")!;
-    });
   }
 }
