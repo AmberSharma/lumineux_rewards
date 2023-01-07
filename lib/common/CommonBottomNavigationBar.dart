@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:lumineux_rewards_app/Dashboard.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'BaseConstants.dart';
+import '../BaseConstants.dart';
 
 class CommonBottomNavigationBar extends StatefulWidget {
   const CommonBottomNavigationBar({Key? key}) : super(key: key);
@@ -13,6 +15,7 @@ class CommonBottomNavigationBar extends StatefulWidget {
 
 class _CommonBottomNavigationBarState extends State<CommonBottomNavigationBar> {
   var pointsValue = "";
+  NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
 
   @override
   void initState() {
@@ -36,7 +39,14 @@ class _CommonBottomNavigationBarState extends State<CommonBottomNavigationBar> {
                   icon: const Icon(Icons.home_filled),
                   iconSize: 25.0,
                   color: Colors.white,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Dashboard(),
+                      ),
+                    );
+                  },
                 ),
                 const Text(BaseConstants.homeLabel),
               ],
@@ -49,7 +59,7 @@ class _CommonBottomNavigationBarState extends State<CommonBottomNavigationBar> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    pointsValue,
+                    "$pointsValue ",
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -86,7 +96,8 @@ class _CommonBottomNavigationBarState extends State<CommonBottomNavigationBar> {
   void getPoints() async {
     var prefs = await SharedPreferences.getInstance();
     setState(() {
-      pointsValue = prefs.getString(BaseConstants.points)!;
+      pointsValue =
+          myFormat.format(int.parse(prefs.getString(BaseConstants.points)!));
     });
   }
 }

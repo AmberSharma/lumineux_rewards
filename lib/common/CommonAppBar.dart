@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'showCustomDialogPopup.dart';
+import '../showCustomDialogPopup.dart';
 import 'package:lumineux_rewards_app/AddReceiptProject.dart';
+
+import 'LeadingAppBar.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CommonAppBar({Key? key}) : super(key: key);
@@ -8,17 +10,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: Builder(
-        builder: (BuildContext context) {
-          return IconButton(
-            icon: const Icon(Icons.add_circle),
-            onPressed: () async {
-              await showCustomDialogPopup<String?>(
-                  context, const AddReceiptProject());
-            },
-          );
-        },
-      ),
+      leading: const LeadingAppBar(),
       backgroundColor: Colors.lightGreen[900],
       actions: [
         IconButton(

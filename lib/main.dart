@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lumineux_rewards_app/ClaimReward.dart';
 import 'package:lumineux_rewards_app/Dashboard.dart';
 import 'package:lumineux_rewards_app/Login.dart';
 

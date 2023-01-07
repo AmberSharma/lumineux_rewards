@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lumineux_rewards_app/Contactus.dart';
 import 'package:lumineux_rewards_app/HowItWorks.dart';
-import 'CommonAppBar.dart';
+import 'common/CommonAppBar.dart';
 import 'package:lumineux_rewards_app/BaseConstants.dart';
-import 'CommonBottomNavigationBar.dart';
+import 'common/CommonBottomNavigationBar.dart';
 import 'RewardList.dart';
 
 class Dashboard extends StatelessWidget {
@@ -61,7 +61,7 @@ class _InitScreenState extends State<InitScreen> {
                     icon: const Icon(Icons.loyalty),
                     iconSize: 100.0,
                     color: Colors.green,
-                    onPressed: () => Scaffold.of(context).openDrawer(),
+                    onPressed: () {},
                   ),
                   const Text(BaseConstants.claimPointsLabel),
                 ],

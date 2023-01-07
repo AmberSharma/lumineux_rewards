@@ -12,7 +12,10 @@ class BaseConstants {
 
   static const baseUrl = "https://marketing.lumineux.co.uk/";
   static const getInfoUrl = "api/get/user-info/";
+
+  static const getRewardUrl = "api/get/rewards-available/";
   static const points = "points";
+  static const uuid = "uuid";
   static const addReceiptDescription =
       "Add at-least 1 image of your receipt, below, Add a description, then tap 'Submit' to send it to Lumineux. You will receive your points once validated.";
   static const contactusDescription =

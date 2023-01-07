@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:lumineux_rewards_app/AddReceiptProject.dart';
-import 'showCustomDialogPopup.dart';
+import 'package:intl/intl.dart';
+import 'package:lumineux_rewards_app/ClaimReward.dart';
+import 'package:lumineux_rewards_app/common/CommonBottomNavigationBar.dart';
+import 'package:lumineux_rewards_app/common/LeadingAppBar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'BaseConstants.dart';
 import 'inc/Reward.dart';
+import 'package:http/http.dart' as http;
 
 class RewardList extends StatefulWidget {
   const RewardList({super.key});
@@ -14,45 +20,24 @@ class RewardList extends StatefulWidget {
 }
 
 class RewardListView extends State<RewardList> {
-  List<Reward> rewards = getJson();
+  NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
+  List<Reward> rewardList = [];
 
-  static List<Reward> getJson() {
-    const data = [
-      {
-        "name": "iPad Mini Test",
-        "points": "2000 Points",
-        "url":
-            "https://www.aptronixindia.com/media/catalog/product/cache/b5906e3ec4e5a6ce87664252573b40fe/i/p/ipad-mini-select-wifi-pink-202109_1.png",
-      },
-      {
-        "name": "Amazon Gift Card",
-        "points": "15000 Points",
-        "url":
-            "https://www.aptronixindia.com/media/catalog/product/cache/b5906e3ec4e5a6ce87664252573b40fe/i/p/ipad-mini-select-wifi-pink-202109_1.png",
-      }
-    ];
-
-    return data.map<Reward>(Reward.fromJson).toList();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getRewardList();
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      initialIndex: 1,
+      initialIndex: 0,
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(Icons.add_circle),
-                onPressed: () async {
-                  await showCustomDialogPopup<String?>(
-                      context, const AddReceiptProject());
-                },
-              );
-            },
-          ),
+          leading: const LeadingAppBar(),
           backgroundColor: Colors.lightGreen[900],
           actions: [
             IconButton(
@@ -78,7 +63,7 @@ class RewardListView extends State<RewardList> {
         body: TabBarView(
           children: <Widget>[
             Center(
-              child: buildRewards(rewards),
+              child: buildRewards(rewardList),
             ),
             const Center(
               child: Text("It's rainy here"),
@@ -88,64 +73,7 @@ class RewardListView extends State<RewardList> {
             ),
           ],
         ),
-        bottomNavigationBar: SizedBox(
-          height: 80.0,
-          child: BottomAppBar(
-            color: Colors.lightGreen[800],
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.home_filled),
-                      iconSize: 25.0,
-                      color: Colors.white,
-                      onPressed: () {},
-                    ),
-                    const Text(BaseConstants.homeLabel),
-                  ],
-                ),
-                FloatingActionButton.extended(
-                  onPressed: () {
-                    // Add your onPressed code here!
-                  },
-                  label: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
-                        "20,000 ",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        BaseConstants.pointsLabel,
-                        style: TextStyle(
-                          color: Colors.lightGreen,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  backgroundColor: Colors.white,
-                ),
-                Column(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.account_circle),
-                      iconSize: 25.0,
-                      color: Colors.white,
-                      onPressed: () {},
-                    ),
-                    const Text(BaseConstants.youLabel),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
+        bottomNavigationBar: const CommonBottomNavigationBar(),
       ),
     );
   }
@@ -170,9 +98,62 @@ class RewardListView extends State<RewardList> {
               ),
               title: Text(reward.name),
               subtitle: Text(reward.points),
-              //trailing: Icon(Icons.more_vert),
+              onTap: () {
+                Reward argument = Reward(
+                    name: reward.name,
+                    points: reward.points,
+                    url: reward.url,
+                    uuid: reward.uuid,
+                    description: reward.description);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ClaimReward(
+                      rewardList: argument,
+                    ),
+                  ),
+                );
+
+                // Navigator.push(
+                //   context,
+                //   ClaimReward.tag,
+                //   arguments: Reward(
+                //     name: reward.name,
+                //     points: reward.points,
+                //     url: reward.url,
+                //     uuid: reward.uuid,
+                //   ),
+                // );
+              },
             ),
           );
         },
       );
+
+  void getRewardList() async {
+    var prefs = await SharedPreferences.getInstance();
+    var uuid = prefs.getString(BaseConstants.uuid)!;
+    var url = BaseConstants.baseUrl + BaseConstants.getRewardUrl + uuid;
+    http.Response response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      var responseData = jsonDecode(response.body);
+      if (responseData["status"] == "success") {
+        List data = responseData["data"];
+        List rewardJson = [];
+        for (var item in data) {
+          rewardJson.add({
+            "uuid": item["uuid"],
+            "name": item["name"],
+            "points": myFormat.format(int.parse(item["points"])),
+            "url": item["img"][0],
+            "description": item["description"]
+          });
+        }
+        setState(() {
+          rewardList = rewardJson.map<Reward>(Reward.fromJson).toList();
+        });
+      }
+    }
+  }
 }

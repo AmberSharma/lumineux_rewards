@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'BaseConstants.dart';
-import 'CommonAppBar.dart';
-import 'CommonBottomNavigationBar.dart';
+import 'common/CommonAppBar.dart';
+import 'common/CommonBottomNavigationBar.dart';
 
 class HowItWorks extends StatelessWidget {
   const HowItWorks({Key? key}) : super(key: key);

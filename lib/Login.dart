@@ -91,7 +91,6 @@ class _LoginState extends State<Login> {
               _formKey.currentState!.save();
 
               var parameters = "/0/${_username!}/${_password!}";
-              List<Map<String, bool>> responseToParent = [];
               http.Response response = await http.get(Uri.parse(
                   BaseConstants.baseUrl +
                       BaseConstants.getInfoUrl +
