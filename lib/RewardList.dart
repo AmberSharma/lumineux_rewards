@@ -102,6 +102,7 @@ class RewardListView extends State<RewardList> {
                 Reward argument = Reward(
                     name: reward.name,
                     points: reward.points,
+                    pointsLabel: reward.pointsLabel,
                     url: reward.url,
                     uuid: reward.uuid,
                     description: reward.description);
@@ -138,6 +139,7 @@ class RewardListView extends State<RewardList> {
 
     if (response.statusCode == 200) {
       var responseData = jsonDecode(response.body);
+      print(responseData);
       if (responseData["status"] == "success") {
         List data = responseData["data"];
         List rewardJson = [];
@@ -145,8 +147,9 @@ class RewardListView extends State<RewardList> {
           rewardJson.add({
             "uuid": item["uuid"],
             "name": item["name"],
-            "points": myFormat.format(int.parse(item["points"])),
-            "url": item["img"][0],
+            "points": item["points"],
+            "pointsLabel": myFormat.format(int.parse(item["points"])),
+            "url": item["thu"][0],
             "description": item["description"]
           });
         }

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:lumineux_rewards_app/ClaimConfirmation.dart';
+import 'package:lumineux_rewards_app/showCustomDialogPopup.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'AddReceiptProject.dart';
 import 'BaseConstants.dart';
 import 'inc/Reward.dart';
+import 'package:http/http.dart' as http;
 
 class ClaimReward extends StatefulWidget {
   final Reward rewardList;
@@ -13,6 +19,18 @@ class ClaimReward extends StatefulWidget {
 }
 
 class _ClaimRewardState extends State<ClaimReward> {
+  var uuid = "";
+  var points = "";
+  var pointsLabel = "";
+
+  NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUuidPoints();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,26 +117,29 @@ class _ClaimRewardState extends State<ClaimReward> {
                                   color: Colors.lightGreen),
                             ),
                             TextSpan(
-                                text: "${widget.rewardList.points} points"),
+                                text:
+                                    "${widget.rewardList.pointsLabel} points"),
                           ],
                         ),
                       ),
                       RichText(
-                        text: const TextSpan(
+                        text: TextSpan(
                           // Note: Styles for TextSpans must be explicitly defined.
                           // Child text spans will inherit styles from parent
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 17.0,
                               color: Colors.black,
                               fontFamily: 'Montserrat'),
                           children: <TextSpan>[
-                            TextSpan(
+                            const TextSpan(
                               text: 'You have: ',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.lightGreen),
                             ),
-                            TextSpan(text: "20,000 points"),
+                            TextSpan(
+                              text: "$pointsLabel ${BaseConstants.pointsLabel}",
+                            ),
                           ],
                         ),
                       ),
@@ -140,7 +161,48 @@ class _ClaimRewardState extends State<ClaimReward> {
                           textStyle: const TextStyle(fontSize: 20),
                           backgroundColor: const Color(0xFFABCC59),
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          await showCustomDialogPopup<String?>(
+                            context,
+                            ClaimConfirmation(
+                              userUuid: uuid,
+                              itemUuid: widget.rewardList.uuid,
+                              userPoints: (int.parse(points) -
+                                      int.parse(widget.rewardList.points))
+                                  .toString(),
+                            ),
+                          );
+                        },
+                        // var parameters = "/{$uuid}/${widget.rewardList.uuid}";
+                        // http.Response response = await http.get(Uri.parse(
+                        //     BaseConstants.baseUrl +
+                        //         BaseConstants.getInfoUrl +
+                        //         parameters));
+                        //
+                        // if (response.statusCode == 200) {
+                        //   var responseData = jsonDecode(response.body);
+                        //
+                        //   if (responseData["status"] == "success") {
+                        //     var data = responseData["data"];
+                        //     var prefs = await SharedPreferences.getInstance();
+                        //     await prefs.setString('uuid', data["uuid"]);
+                        //     await prefs.setString(
+                        //         'user_name', data["username"]);
+                        //     await prefs.setString(
+                        //         'first_name', data["first_name"]);
+                        //     await prefs.setString(
+                        //         'last_name', data["last_name"]);
+                        //     await prefs.setString('email', data["email"]);
+                        //     await prefs.setString('mobile', data["mobile"]);
+                        //     await prefs.setString('points', data["points"]);
+                        //     await prefs.setString('address', data["address"]);
+                        //     await prefs.setString(
+                        //         'reward_img', data["img"]["dash_banner_1"]);
+                        //     print(prefs.getString('uuid'));
+                        //     Navigator.of(context).pushNamed(Dashboard.tag);
+                        //   }
+                        //   //return responseToParent[{"success": false, "message": responseData["type"] }];
+                        // }
                         child: const Text('Claim now'),
                       ),
                     ],
@@ -152,5 +214,14 @@ class _ClaimRewardState extends State<ClaimReward> {
         ),
       ),
     );
+  }
+
+  void getUuidPoints() async {
+    var prefs = await SharedPreferences.getInstance();
+    setState(() {
+      uuid = prefs.getString("uuid")!;
+      points = prefs.getString("points")!;
+      pointsLabel = myFormat.format(int.parse(prefs.getString("points")!));
+    });
   }
 }

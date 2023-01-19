@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lumineux_rewards_app/Contactus.dart';
 import 'package:lumineux_rewards_app/Dashboard.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import '../BaseConstants.dart';
+import '../You.dart';
 
 class CommonBottomNavigationBar extends StatefulWidget {
   const CommonBottomNavigationBar({Key? key}) : super(key: key);
@@ -36,19 +38,21 @@ class _CommonBottomNavigationBarState extends State<CommonBottomNavigationBar> {
             Column(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.home_filled),
+                  icon: const Icon(Icons.support_agent),
                   iconSize: 25.0,
                   color: Colors.white,
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const Dashboard(),
-                      ),
+                          builder: (context) => const Contactus()),
                     );
                   },
                 ),
-                const Text(BaseConstants.homeLabel),
+                const Text(
+                  BaseConstants.contactUsLabel,
+                  style: TextStyle(color: Colors.white),
+                ),
               ],
             ),
             FloatingActionButton.extended(
@@ -82,9 +86,19 @@ class _CommonBottomNavigationBarState extends State<CommonBottomNavigationBar> {
                   icon: const Icon(Icons.account_circle),
                   iconSize: 25.0,
                   color: Colors.white,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const You(),
+                      ),
+                    );
+                  },
                 ),
-                const Text(BaseConstants.youLabel),
+                const Text(
+                  BaseConstants.youLabel,
+                  style: TextStyle(color: Colors.white),
+                ),
               ],
             ),
           ],

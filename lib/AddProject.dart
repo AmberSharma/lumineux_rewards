@@ -1,40 +1,42 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:date_field/date_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lumineux_rewards_app/ActionSuccess.dart';
 import 'package:lumineux_rewards_app/You.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'BaseConstants.dart';
 import 'package:http/http.dart' as http;
 
-class AddReceipt extends StatefulWidget {
-  const AddReceipt({super.key});
+class AddProject extends StatefulWidget {
+  const AddProject({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return AddReceiptForm();
+    return AddProjectForm();
   }
 }
 
-class AddReceiptForm extends State<AddReceipt> {
+class AddProjectForm extends State<AddProject> {
   var uuid = "";
   String? _field_1;
-  String? _field_2;
+  DateTime? _field_2;
   String? _description;
 
   List files = [];
   late final List<PlatformFile> _platformFile;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Widget _buildWholesalerField() {
+  Widget _buildNameField() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: TextFormField(
         decoration: const InputDecoration(
           contentPadding: EdgeInsets.zero,
-          hintText: 'Tap here to enter a wholesaler',
-          labelText: 'Wholesaler *',
+          hintText: 'Tap here to enter a project name',
+          labelText: 'Project name *',
           hintStyle: TextStyle(color: Colors.grey),
           enabledBorder: OutlineInputBorder(
             borderSide:
@@ -59,14 +61,14 @@ class AddReceiptForm extends State<AddReceipt> {
     );
   }
 
-  Widget _buildAreaField() {
+  Widget _buildDateField() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
-      child: TextFormField(
+      child: DateTimeFormField(
         decoration: const InputDecoration(
           contentPadding: EdgeInsets.zero,
-          hintText: 'Tap here to enter a town/city',
-          labelText: 'Town/City *',
+          hintText: 'Tap here to enter a date',
+          labelText: 'Project date *',
           hintStyle: TextStyle(color: Colors.grey),
           enabledBorder: OutlineInputBorder(
             borderSide:
@@ -79,13 +81,17 @@ class AddReceiptForm extends State<AddReceipt> {
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
         ),
-        onSaved: (String? value) {
+        mode: DateTimeFieldPickerMode.date,
+        autovalidateMode: AutovalidateMode.always,
+        // validator: (String? value) {
+        //   if (value!.isEmpty) {
+        //     return "Date is required";
+        //   }
+        // },
+        validator: (e) =>
+            (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+        onDateSelected: (DateTime value) {
           _field_2 = value;
-        },
-        validator: (String? value) {
-          if (value!.isEmpty) {
-            return "Town/City is required";
-          }
         },
       ),
     );
@@ -280,8 +286,8 @@ class AddReceiptForm extends State<AddReceipt> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _buildWholesalerField(),
-                          _buildAreaField(),
+                          _buildNameField(),
+                          _buildDateField(),
                           _buildDescriptionField(),
                         ],
                       )),
@@ -324,13 +330,16 @@ class AddReceiptForm extends State<AddReceipt> {
                       if (isValid) {
                         _formKey.currentState!.save();
                         if (uuid.isNotEmpty) {
-                          print(uuid);
                           var uri = Uri.parse(
                               "${BaseConstants.baseUrl}api/put/points-request/$uuid/");
                           var request = http.MultipartRequest("POST", uri);
-                          request.fields['type'] = "1";
+                          request.fields['type'] = "2";
                           request.fields['field_1'] = _field_1!;
-                          request.fields['field_2'] = _field_2!;
+                          request.fields['field_2'] =
+                              DateFormat.yMMMEd().format(_field_2!);
+                          print(request.fields['field_1']);
+                          print(request.fields['field_2']);
+                          print(request.fields['type']);
                           request.fields['description'] = _description!;
                           if (_platformFile.isNotEmpty) {
                             _platformFile.asMap().forEach((index, value) async {
@@ -351,7 +360,7 @@ class AddReceiptForm extends State<AddReceipt> {
                                   MaterialPageRoute(
                                     builder: (context) => ActionSuccess(
                                         description:
-                                            BaseConstants.receiptSubmitSuccess),
+                                            BaseConstants.projectSubmitSuccess),
                                   ),
                                 );
                               }

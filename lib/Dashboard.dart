@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lumineux_rewards_app/AddProject.dart';
+import 'package:lumineux_rewards_app/AddReceipt.dart';
 import 'package:lumineux_rewards_app/Contactus.dart';
 import 'package:lumineux_rewards_app/HowItWorks.dart';
+import 'package:lumineux_rewards_app/showCustomDialogPopup.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'AddReceiptProject.dart';
 import 'common/CommonAppBar.dart';
 import 'package:lumineux_rewards_app/BaseConstants.dart';
 import 'common/CommonBottomNavigationBar.dart';
@@ -27,6 +32,15 @@ class InitScreen extends StatefulWidget {
 }
 
 class _InitScreenState extends State<InitScreen> {
+  var rewardImage = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getRewardIconImage();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,29 +55,35 @@ class _InitScreenState extends State<InitScreen> {
               Column(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.home_filled),
+                    icon: Image.asset('images/icon-receipt.png'),
                     iconSize: 100.0,
                     color: Colors.green,
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const RewardList()),
+                            builder: (context) => const AddReceipt()),
                       );
                     },
                   ),
-                  const Text(BaseConstants.viewRewardsLabel),
+                  const Text(BaseConstants.addReceiptLabel),
                 ],
               ),
               Column(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.loyalty),
+                    icon: Image.asset('images/icon-project.png'),
                     iconSize: 100.0,
                     color: Colors.green,
-                    onPressed: () {},
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddProject()),
+                      );
+                    },
                   ),
-                  const Text(BaseConstants.claimPointsLabel),
+                  const Text(BaseConstants.addProjectLabel),
                 ],
               ),
             ],
@@ -74,7 +94,24 @@ class _InitScreenState extends State<InitScreen> {
               Column(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.contact_support),
+                    icon: Image.asset('images/icon-rewards.png'),
+                    iconSize: 100.0,
+                    color: Colors.green,
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const RewardList()),
+                      );
+                    },
+                  ),
+                  const Text(BaseConstants.claimPointsLabel),
+                ],
+              ),
+              Column(
+                children: [
+                  IconButton(
+                    icon: Image.asset('images/icon-how.png'),
                     iconSize: 100.0,
                     color: Colors.green,
                     onPressed: () {
@@ -88,60 +125,18 @@ class _InitScreenState extends State<InitScreen> {
                   const Text(BaseConstants.howItWorksLabel),
                 ],
               ),
-              Column(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.support_agent),
-                    iconSize: 100.0,
-                    color: Colors.green,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Contactus()),
-                      );
-                    },
-                  ),
-                  const Text(BaseConstants.contactUsLabel),
-                ],
-              ),
             ],
           ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.end,
-          //   children: [],
-          // )
         ],
       ),
       bottomNavigationBar: const CommonBottomNavigationBar(),
-      // drawer: Drawer(
-      //   child: Row(
-      //     children: [
-      //       Column(
-      //         children: [
-      //           IconButton(
-      //             icon: const Icon(Icons.contact_support),
-      //             iconSize: 100.0,
-      //             color: Colors.green,
-      //             onPressed: () {},
-      //           ),
-      //           const Text("How it works"),
-      //         ],
-      //       ),
-      //       Column(
-      //         children: [
-      //           IconButton(
-      //             icon: const Icon(Icons.support_agent),
-      //             iconSize: 100.0,
-      //             color: Colors.green,
-      //             onPressed: () {},
-      //           ),
-      //           const Text("Contact us"),
-      //         ],
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
+  }
+
+  void getRewardIconImage() async {
+    var prefs = await SharedPreferences.getInstance();
+    setState(() {
+      rewardImage = prefs.getString("reward_img")!;
+    });
   }
 }

@@ -98,8 +98,7 @@ class _LoginState extends State<Login> {
 
               if (response.statusCode == 200) {
                 var responseData = jsonDecode(response.body);
-                print(responseData);
-                print(responseData["status"]);
+
                 if (responseData["status"] == "success") {
                   var data = responseData["data"];
                   var prefs = await SharedPreferences.getInstance();

@@ -1,95 +1,28 @@
-import 'dart:convert';
 import 'dart:io';
+import 'package:date_field/date_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:lumineux_rewards_app/ActionSuccess.dart';
-import 'package:lumineux_rewards_app/You.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'BaseConstants.dart';
-import 'package:http/http.dart' as http;
 
-class AddReceipt extends StatefulWidget {
-  const AddReceipt({super.key});
+class AddProject extends StatefulWidget {
+  const AddProject({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return AddReceiptForm();
+    return AddProjectForm();
   }
 }
 
-class AddReceiptForm extends State<AddReceipt> {
+class AddProjectForm extends State<AddProject> {
   var uuid = "";
   String? _field_1;
-  String? _field_2;
+  DateTime? _field_2;
   String? _description;
 
+  // FilePickerResult? _filePickerResult;
   List files = [];
   late final List<PlatformFile> _platformFile;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  Widget _buildWholesalerField() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-      child: TextFormField(
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.zero,
-          hintText: 'Tap here to enter a wholesaler',
-          labelText: 'Wholesaler *',
-          hintStyle: TextStyle(color: Colors.grey),
-          enabledBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(width: 3, color: Colors.greenAccent), //<-- SEE HERE
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 3, color: Colors.amberAccent),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-        ),
-        onSaved: (String? value) {
-          _field_1 = value;
-        },
-        validator: (String? value) {
-          if (value!.isEmpty) {
-            return "Wholesaler is required";
-          }
-        },
-      ),
-    );
-  }
-
-  Widget _buildAreaField() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-      child: TextFormField(
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.zero,
-          hintText: 'Tap here to enter a town/city',
-          labelText: 'Town/City *',
-          hintStyle: TextStyle(color: Colors.grey),
-          enabledBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(width: 3, color: Colors.greenAccent), //<-- SEE HERE
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 3, color: Colors.amberAccent),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-        ),
-        onSaved: (String? value) {
-          _field_2 = value;
-        },
-        validator: (String? value) {
-          if (value!.isEmpty) {
-            return "Town/City is required";
-          }
-        },
-      ),
-    );
-  }
 
   Widget _buildDescriptionField() {
     return Padding(
@@ -126,17 +59,84 @@ class AddReceiptForm extends State<AddReceipt> {
     );
   }
 
+  Widget _buildNameField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: TextFormField(
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.zero,
+          hintText: 'Tap here to enter a name',
+          labelText: 'Project name *',
+          hintStyle: TextStyle(color: Colors.grey),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 3, color: Colors.greenAccent),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 3, color: Colors.greenAccent),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+        ),
+        onSaved: (String? value) {
+          _field_1 = value;
+        },
+        validator: (String? value) {
+          if (value!.isEmpty) {
+            return "Project name is required";
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildDateField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: DateTimeFormField(
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.zero,
+          hintText: 'Tap here to enter a date',
+          labelText: 'Project date *',
+          hintStyle: TextStyle(color: Colors.grey),
+          enabledBorder: OutlineInputBorder(
+            borderSide:
+                BorderSide(width: 3, color: Colors.greenAccent), //<-- SEE HERE
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 3, color: Colors.amberAccent),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+        ),
+        mode: DateTimeFieldPickerMode.date,
+        autovalidateMode: AutovalidateMode.always,
+        // validator: (String? value) {
+        //   if (value!.isEmpty) {
+        //     return "Date is required";
+        //   }
+        // },
+        validator: (e) =>
+            (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+        onDateSelected: (DateTime value) {
+          _field_2 = value;
+        },
+      ),
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _platformFile = [];
-    getUuid();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.lightGreen[900],
         actions: [
@@ -159,7 +159,7 @@ class AddReceiptForm extends State<AddReceipt> {
                     padding:
                         EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
                     child: Text(
-                      "Add a Receipt",
+                      "Add a Project",
                       style: TextStyle(
                         fontSize: 28.0,
                       ),
@@ -177,7 +177,7 @@ class AddReceiptForm extends State<AddReceipt> {
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24.0),
                       child: Text(
-                        BaseConstants.addReceiptDescription,
+                        BaseConstants.addProjectDescription,
                         style: TextStyle(
                           fontSize: 17.0,
                         ),
@@ -196,7 +196,7 @@ class AddReceiptForm extends State<AddReceipt> {
                   Expanded(
                     child: GridView.count(
                       primary: false,
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.fromLTRB(24.0, 0.0, 0.0, 0.0),
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
                       crossAxisCount: 4,
@@ -212,17 +212,7 @@ class AddReceiptForm extends State<AddReceipt> {
                                 Radius.circular(10),
                               ),
                             ),
-                            child: ClipRRect(
-                              borderRadius:
-                                  BorderRadius.circular(10), // Image border
-                              child: SizedBox.fromSize(
-                                size: const Size.fromRadius(10), // Image radius
-                                child: Image.file(
-                                  File(file),
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            ),
+                            child: Image.file(File(file)),
                           ),
                         ),
                         Container(
@@ -276,15 +266,16 @@ class AddReceiptForm extends State<AddReceipt> {
               child: CustomScrollView(
                 slivers: [
                   SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _buildWholesalerField(),
-                          _buildAreaField(),
-                          _buildDescriptionField(),
-                        ],
-                      )),
+                    hasScrollBody: false,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildNameField(),
+                        _buildDateField(),
+                        _buildDescriptionField(),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -292,7 +283,7 @@ class AddReceiptForm extends State<AddReceipt> {
             //   flex: 2,
             //   child: Row(
             //     children: [
-            //       _buildAreaField(),
+            //
             //     ],
             //   ),
             // ),
@@ -300,7 +291,7 @@ class AddReceiptForm extends State<AddReceipt> {
             //   flex: 2,
             //   child: Row(
             //     children: [
-            //       _buildDescriptionField(),
+            //
             //     ],
             //   ),
             // ),
@@ -318,47 +309,11 @@ class AddReceiptForm extends State<AddReceipt> {
                       "Submit",
                       style: TextStyle(color: Colors.white),
                     ),
-                    onPressed: () async {
-                      final isValid = _formKey.currentState!.validate();
-
-                      if (isValid) {
-                        _formKey.currentState!.save();
-                        if (uuid.isNotEmpty) {
-                          print(uuid);
-                          var uri = Uri.parse(
-                              "${BaseConstants.baseUrl}api/put/points-request/$uuid/");
-                          var request = http.MultipartRequest("POST", uri);
-                          request.fields['type'] = "1";
-                          request.fields['field_1'] = _field_1!;
-                          request.fields['field_2'] = _field_2!;
-                          request.fields['description'] = _description!;
-                          if (_platformFile.isNotEmpty) {
-                            _platformFile.asMap().forEach((index, value) async {
-                              var name = "files_$index";
-                              request.files.add(
-                                  await http.MultipartFile.fromPath(
-                                      name, value.path.toString()));
-                            });
-                          }
-                          request.send().then((response) async {
-                            final responseJson =
-                                await response.stream.bytesToString();
-                            final responseArr = json.decode(responseJson);
-                            if (response.statusCode == 200) {
-                              if (responseArr["status"] == "success") {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ActionSuccess(
-                                        description:
-                                            BaseConstants.receiptSubmitSuccess),
-                                  ),
-                                );
-                              }
-                            }
-                          });
-                        }
+                    onPressed: () {
+                      if (!_formKey.currentState!.validate()) {
+                        return;
                       }
+                      _formKey.currentState!.save();
                     },
                   ),
                 ],
@@ -368,12 +323,5 @@ class AddReceiptForm extends State<AddReceipt> {
         ),
       ),
     );
-  }
-
-  void getUuid() async {
-    var prefs = await SharedPreferences.getInstance();
-    setState(() {
-      uuid = prefs.getString("uuid")!;
-    });
   }
 }

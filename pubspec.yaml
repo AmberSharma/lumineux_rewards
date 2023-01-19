@@ -40,9 +40,10 @@ dependencies:
   file_picker: ^5.2.4
   shared_preferences: ^2.0.15
   font_awesome_flutter: ^10.3.0
+  date_field: ^3.0.2
 
   # Number Format
-  intl: ^0.18.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
@@ -64,14 +65,16 @@ flutter:
     - family: Montserrat
       fonts:
         - asset: fonts/Montserrat-Regular.ttf
+        - asset: fonts/Montserrat-Bold.ttf
+          weight: 700
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+     - images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

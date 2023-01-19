@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lumineux_rewards_app/AddProject.dart';
 import 'package:lumineux_rewards_app/AddReceipt.dart';
 
 class AddReceiptProject extends StatelessWidget {
@@ -81,7 +82,13 @@ class AddReceiptProject extends StatelessWidget {
                             ),
                             iconSize: 100.0,
                             color: Colors.white,
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const AddProject()),
+                              );
+                            },
                           ),
                           const Text(
                             "Add a project",
