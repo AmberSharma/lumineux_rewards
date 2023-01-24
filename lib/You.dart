@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:lumineux_rewards_app/Dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'BaseConstants.dart';
 import 'package:http/http.dart' as http;
@@ -16,212 +18,211 @@ class You extends StatefulWidget {
 }
 
 class YouForm extends State<You> {
-  var uuid = "";
-  var userName = "";
-  var firstName = "";
-  var lastName = "";
-  var email = "";
-  var mobile = "";
-  var points = "";
-  var address = "";
-
-  String? _description;
+  int apiCall = 0;
+  String? _uuid;
   String? _name;
-  String? _mobile;
   String? _email;
+  String? _company;
+  String? _mobile;
+  String? _userName;
   String? _address;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Widget _buildNameField() {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Your name*",
-                style: TextStyle(fontSize: 16.0),
-              ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Your name*",
+              style: TextStyle(fontSize: 16.0),
             ),
-            TextFormField(
-              initialValue: "$firstName $lastName",
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.zero,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                filled: true,
-                fillColor: Colors.white,
+          ),
+          TextFormField(
+            key: Key(_name.toString()),
+            initialValue: _name,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 0, 0),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                borderSide: const BorderSide(width: 1, color: Colors.blueGrey),
               ),
-              onSaved: (String? value) {
-                _name = value;
-              },
-              validator: (String? value) {
-                if (value!.isEmpty) {
-                  return "Name is required";
-                }
-              },
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              filled: true,
+              fillColor: Colors.white,
             ),
-          ],
-        ),
+            onSaved: (String? value) {
+              _name = value!;
+            },
+            validator: (String? value) {
+              if (value!.isEmpty) {
+                return "Name is required";
+              }
+            },
+          ),
+        ],
       ),
     );
   }
 
-  // Widget _buildCompanyField() {
-  //   return Expanded(
-  //     child: Padding(
-  //       padding: const EdgeInsets.symmetric(horizontal: 24.0),
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //         children: [
-  //           const Align(
-  //             alignment: Alignment.centerLeft,
-  //             child: Text(
-  //               "Company*",
-  //               style: TextStyle(fontSize: 16.0),
-  //             ),
-  //           ),
-  //           TextFormField(
-  //             decoration: InputDecoration(
-  //               contentPadding: EdgeInsets.zero,
-  //               border: OutlineInputBorder(
-  //                 borderRadius: BorderRadius.circular(20.0),
-  //               ),
-  //               filled: true,
-  //               fillColor: Colors.white,
-  //             ),
-  //             onSaved: (String? value) {
-  //               _company = value;
-  //             },
-  //             validator: (String? value) {
-  //               if (value!.isEmpty) {
-  //                 return "Name is required";
-  //               }
-  //             },
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget _buildCompanyField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Company*",
+              style: TextStyle(fontSize: 16.0),
+            ),
+          ),
+          TextFormField(
+            readOnly: true,
+            key: Key(_company.toString()),
+            initialValue: _company,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 0, 0),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              filled: true,
+              fillColor: Colors.white,
+            ),
+            onSaved: (String? value) {
+              _company = value;
+            },
+            validator: (String? value) {
+              if (value!.isEmpty) {
+                return "Company is required";
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildPhoneField() {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Phone number*",
-                style: TextStyle(fontSize: 16.0),
-              ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Phone number*",
+              style: TextStyle(fontSize: 16.0),
             ),
-            TextFormField(
-              initialValue: mobile,
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.zero,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                filled: true,
-                fillColor: Colors.white,
+          ),
+          TextFormField(
+            key: Key(_mobile.toString()),
+            initialValue: _mobile,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 0, 0),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
               ),
-              onSaved: (String? value) {
-                _mobile = value;
-              },
-              validator: (String? value) {
-                if (value!.isEmpty) {
-                  return "Name is required";
-                }
-              },
+              //filled: true,
+              //fillColor: Colors.white,
             ),
-          ],
-        ),
+            onSaved: (String? value) {
+              _mobile = value;
+            },
+            validator: (String? value) {
+              if (value!.isEmpty) {
+                return "Phone number is required";
+              }
+            },
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildEmailField() {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Email address*",
-                style: TextStyle(fontSize: 16.0),
-              ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Email address*",
+              style: TextStyle(fontSize: 16.0),
             ),
-            TextFormField(
-              initialValue: email,
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.zero,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                filled: true,
-                fillColor: Colors.white,
+          ),
+          TextFormField(
+            key: Key(_email.toString()),
+            initialValue: _email,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 0, 0),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
               ),
-              onSaved: (String? value) {
-                _email = value;
-              },
-              validator: (String? value) {
-                if (value!.isEmpty) {
-                  return "Email is required";
-                }
-              },
+              filled: true,
+              fillColor: Colors.white,
             ),
-          ],
-        ),
+            onSaved: (String? value) {
+              _email = value;
+            },
+            validator: (String? value) {
+              if (value!.isEmpty) {
+                return "Email is required";
+              }
+            },
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildAddressField() {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Delivery address*",
-                style: TextStyle(fontSize: 16.0),
-              ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Delivery address*",
+              style: TextStyle(fontSize: 16.0),
             ),
-            TextFormField(
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.zero,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                filled: true,
-                fillColor: Colors.white,
+          ),
+          TextFormField(
+            // minLines: 5,
+            maxLines: null,
+            keyboardType: TextInputType.multiline,
+            key: Key(_address.toString()),
+            initialValue: _address,
+            decoration: InputDecoration(
+              // contentPadding: EdgeInsets.zero,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
               ),
-              onSaved: (String? value) {
-                _address = value;
-              },
-              validator: (String? value) {
-                if (value!.isEmpty) {
-                  return "Address is required";
-                }
-              },
+              filled: true,
+              fillColor: Colors.white,
             ),
-          ],
-        ),
+            onSaved: (String? value) {
+              _address = value;
+            },
+            validator: (String? value) {
+              if (value!.isEmpty) {
+                return "Address is required";
+              }
+            },
+          ),
+        ],
       ),
     );
   }
@@ -239,7 +240,8 @@ class YouForm extends State<You> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const Dashboard())),
         ),
         title: const Text(
           "Cancel",
@@ -247,129 +249,173 @@ class YouForm extends State<You> {
         ),
         backgroundColor: Colors.lightGreen[900],
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add_alert),
-            onPressed: () {},
+          TextButton.icon(
+            icon: const Text(
+              'Save',
+              style: TextStyle(color: Colors.white),
+            ),
+            style: TextButton.styleFrom(
+              textStyle: const TextStyle(fontSize: 16),
+            ),
+            onPressed: () async {
+              final isValid = _formKey.currentState!.validate();
+
+              if (isValid) {
+                setState(() {
+                  apiCall = 1;
+                });
+                _formKey.currentState!.save();
+                var parameters = "$_uuid/";
+                var url = BaseConstants.baseUrl +
+                    BaseConstants.putUserInfoUrl +
+                    parameters;
+                http.Response response = await http.post(Uri.parse(url), body: {
+                  'name': _name,
+                  'email': _email,
+                  'address': _address,
+                  'mobile': _mobile
+                });
+                if (response.statusCode == 200) {
+                  var responseData = jsonDecode(response.body);
+                  if (!mounted) return;
+
+                  var snackBar = SnackBar(
+                    content: Text(responseData["status_msg"]),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  setState(() {
+                    apiCall = 0;
+                  });
+                  if (responseData["status"] == "success") {
+                    String name = _name.toString();
+                    int idx = name.indexOf(" ");
+                    List parts = [
+                      name.substring(0, idx).trim(),
+                      name.substring(idx + 1).trim()
+                    ];
+
+                    var prefs = await SharedPreferences.getInstance();
+                    await prefs.setString('first_name', parts[0]);
+                    await prefs.setString('last_name', parts[1]);
+                    await prefs.setString('email', _email!);
+                    await prefs.setString('mobile', _mobile!);
+                    await prefs.setString('address', _address!);
+                  }
+                }
+              }
+            },
+            label: const Icon(
+              Icons.check,
+              color: Colors.white,
+            ),
           ),
         ],
       ),
-      body: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: Column(
-          children: [
-            Row(
-              children: const [
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-                  child: Text(
-                    "You",
-                    style: TextStyle(
-                      fontSize: 28.0,
+      body: apiCall == 1
+          ? const SpinKitPouringHourGlassRefined(
+              color: Colors.green,
+            )
+          : Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Column(
+                children: [
+                  Row(
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 16.0, horizontal: 24.0),
+                        child: Text(
+                          "You",
+                          style: TextStyle(
+                            fontSize: 28.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: Column(
+                            children: [
+                              _buildNameField(),
+                              _buildCompanyField(),
+                              _buildPhoneField(),
+                              _buildEmailField(),
+                              _buildAddressField()
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ],
-            ),
-            Expanded(
-              flex: 2,
-              child: Row(
-                children: [
-                  _buildNameField(),
-                ],
-              ),
-            ),
-            // Expanded(
-            //   flex: 2,
-            //   child: Row(
-            //     children: [
-            //       _buildCompanyField(),
-            //     ],
-            //   ),
-            // ),
-            Expanded(
-              flex: 2,
-              child: Row(
-                children: [
-                  _buildPhoneField(),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Row(
-                children: [
-                  _buildEmailField(),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Row(
-                children: [
-                  _buildAddressField(),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          const Color(0xffabcc59), // Background color
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        RichText(
+                          text: TextSpan(
+                            // Note: Styles for TextSpans must be explicitly defined.
+                            // Child text spans will inherit styles from parent
+                            style: const TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.black,
+                            ),
+                            children: <TextSpan>[
+                              const TextSpan(
+                                  text: 'Username: ',
+                                  style: TextStyle(fontSize: 20.0)),
+                              TextSpan(
+                                  text: _userName,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20.0)),
+                            ],
+                          ),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color(0xffabcc59), // Background color
+                          ),
+                          child: const Text(
+                            "Manage Password",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () async {
+                            // final isValid = _formKey.currentState!.validate();
+                            //
+                            // if (isValid) {
+                            //   _formKey.currentState!.save();
+                            // }
+                          },
+                        ),
+                      ],
                     ),
-                    child: const Text(
-                      "Submit",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () async {
-                      final isValid = _formKey.currentState!.validate();
-
-                      if (isValid) {
-                        _formKey.currentState!.save();
-                        // if (uuid.isNotEmpty) {
-                        //   print(uuid);
-                        //   var uri = Uri.parse(
-                        //       "${BaseConstants.baseUrl}api/put/points-request/$uuid/");
-                        //   var request = http.MultipartRequest("POST", uri);
-                        //   request.fields['description'] = _description!;
-                        //
-                        //   request.send().then((response) async {
-                        //     final respStr =
-                        //         await response.stream.bytesToString();
-                        //     print(respStr);
-                        //     if (response.statusCode == 200)
-                        //       print("Uploaded!");
-                        //     else
-                        //       print("fdsfsd");
-                        //   });
-                        // }
-                      }
-                    },
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 
   void getUserDetails() async {
     var prefs = await SharedPreferences.getInstance();
     setState(() {
-      uuid = prefs.getString("uuid")!;
-      userName = prefs.getString("username")!;
-      firstName = prefs.getString("first_name")!;
-      lastName = prefs.getString("last_name")!;
-      email = prefs.getString("email")!;
-      mobile = prefs.getString("mobile")!;
-      points = prefs.getString("points")!;
-      address = prefs.getString("address")!;
+      _uuid = prefs.getString("uuid")!;
+      _userName = prefs.getString("user_name")!;
+      _name =
+          "${prefs.getString("first_name")!} ${prefs.getString("last_name")!}";
+      _email = prefs.getString("email")!;
+      _mobile = prefs.getString("mobile")!;
+      _company = prefs.getString("company")!;
+      _address = prefs.getString("address")!;
     });
+
+    print(_name);
   }
 }

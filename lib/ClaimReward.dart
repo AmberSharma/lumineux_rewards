@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'AddReceiptProject.dart';
 import 'BaseConstants.dart';
+import 'common/AppBarAction.dart';
 import 'inc/Reward.dart';
 import 'package:http/http.dart' as http;
 
@@ -44,12 +45,7 @@ class _ClaimRewardState extends State<ClaimReward> {
           style: TextStyle(fontSize: 14.0),
         ),
         backgroundColor: Colors.lightGreen[900],
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add_alert),
-            onPressed: () {},
-          ),
-        ],
+        actions: const [AppBarAction()],
       ),
       body: Container(
         padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
@@ -70,10 +66,14 @@ class _ClaimRewardState extends State<ClaimReward> {
               child: SizedBox.expand(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(25.0),
-                  child: Image.network(
-                    widget.rewardList.url,
-                    fit: BoxFit.fill,
-                  ),
+                  child: widget.rewardList.url.isNotEmpty
+                      ? Image.network(
+                          widget.rewardList.url,
+                          fit: BoxFit.fill,
+                        )
+                      : Image.asset(
+                          "images/holding-img.png",
+                        ),
                 ),
               ),
             ),
@@ -156,55 +156,27 @@ class _ClaimRewardState extends State<ClaimReward> {
                 child: Center(
                   child: Column(
                     children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          textStyle: const TextStyle(fontSize: 20),
-                          backgroundColor: const Color(0xFFABCC59),
-                        ),
-                        onPressed: () async {
-                          await showCustomDialogPopup<String?>(
-                            context,
-                            ClaimConfirmation(
-                              userUuid: uuid,
-                              itemUuid: widget.rewardList.uuid,
-                              userPoints: (int.parse(points) -
-                                      int.parse(widget.rewardList.points))
-                                  .toString(),
+                      int.parse(widget.rewardList.points) > int.parse(points)
+                          ? Container()
+                          : ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                textStyle: const TextStyle(fontSize: 20),
+                                backgroundColor: const Color(0xFFABCC59),
+                              ),
+                              onPressed: () async {
+                                await showCustomDialogPopup<String?>(
+                                  context,
+                                  ClaimConfirmation(
+                                    userUuid: uuid,
+                                    itemUuid: widget.rewardList.uuid,
+                                    userPoints: (int.parse(points) -
+                                            int.parse(widget.rewardList.points))
+                                        .toString(),
+                                  ),
+                                );
+                              },
+                              child: const Text('Claim now'),
                             ),
-                          );
-                        },
-                        // var parameters = "/{$uuid}/${widget.rewardList.uuid}";
-                        // http.Response response = await http.get(Uri.parse(
-                        //     BaseConstants.baseUrl +
-                        //         BaseConstants.getInfoUrl +
-                        //         parameters));
-                        //
-                        // if (response.statusCode == 200) {
-                        //   var responseData = jsonDecode(response.body);
-                        //
-                        //   if (responseData["status"] == "success") {
-                        //     var data = responseData["data"];
-                        //     var prefs = await SharedPreferences.getInstance();
-                        //     await prefs.setString('uuid', data["uuid"]);
-                        //     await prefs.setString(
-                        //         'user_name', data["username"]);
-                        //     await prefs.setString(
-                        //         'first_name', data["first_name"]);
-                        //     await prefs.setString(
-                        //         'last_name', data["last_name"]);
-                        //     await prefs.setString('email', data["email"]);
-                        //     await prefs.setString('mobile', data["mobile"]);
-                        //     await prefs.setString('points', data["points"]);
-                        //     await prefs.setString('address', data["address"]);
-                        //     await prefs.setString(
-                        //         'reward_img', data["img"]["dash_banner_1"]);
-                        //     print(prefs.getString('uuid'));
-                        //     Navigator.of(context).pushNamed(Dashboard.tag);
-                        //   }
-                        //   //return responseToParent[{"success": false, "message": responseData["type"] }];
-                        // }
-                        child: const Text('Claim now'),
-                      ),
                     ],
                   ),
                 ),

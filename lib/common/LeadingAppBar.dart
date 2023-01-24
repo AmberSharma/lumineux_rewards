@@ -12,7 +12,10 @@ class LeadingAppBar extends StatelessWidget {
     return Builder(
       builder: (BuildContext context) {
         return IconButton(
-          icon: const Icon(Icons.home_filled),
+          icon: const Icon(
+            Icons.home_filled,
+          ),
+          iconSize: 30.0,
           // onPressed: () async {
           //   await showCustomDialogPopup<String?>(
           //       context, const AddReceiptProject());

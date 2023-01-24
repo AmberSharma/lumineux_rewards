@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:lumineux_rewards_app/ClaimReward.dart';
 import 'package:lumineux_rewards_app/common/CommonBottomNavigationBar.dart';
 import 'package:lumineux_rewards_app/common/LeadingAppBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'BaseConstants.dart';
+import 'common/AppBarAction.dart';
 import 'inc/Reward.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,7 +23,9 @@ class RewardList extends StatefulWidget {
 
 class RewardListView extends State<RewardList> {
   NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
-  List<Reward> rewardList = [];
+  List<Reward> firstTabRewardList = [];
+  List<Reward> secondTabRewardList = [];
+  List<Reward> thirdTabRewardList = [];
 
   @override
   void initState() {
@@ -39,23 +43,18 @@ class RewardListView extends State<RewardList> {
         appBar: AppBar(
           leading: const LeadingAppBar(),
           backgroundColor: Colors.lightGreen[900],
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.add_alert),
-              onPressed: () {},
-            ),
-          ],
+          actions: const [AppBarAction()],
           bottom: const TabBar(
             labelPadding: EdgeInsets.symmetric(horizontal: 2.0),
             tabs: <Widget>[
               Tab(
-                text: BaseConstants.obtainableNowLabel,
+                text: BaseConstants.firstTab,
               ),
               Tab(
-                text: BaseConstants.latestLabel,
+                text: BaseConstants.secondTab,
               ),
               Tab(
-                text: BaseConstants.allLabel,
+                text: BaseConstants.thirdTab,
               ),
             ],
           ),
@@ -63,13 +62,13 @@ class RewardListView extends State<RewardList> {
         body: TabBarView(
           children: <Widget>[
             Center(
-              child: buildRewards(rewardList),
+              child: buildRewards(firstTabRewardList),
             ),
-            const Center(
-              child: Text("It's rainy here"),
+            Center(
+              child: buildRewards(secondTabRewardList),
             ),
-            const Center(
-              child: Text("It's sunny here"),
+            Center(
+              child: buildRewards(thirdTabRewardList),
             ),
           ],
         ),
@@ -78,58 +77,52 @@ class RewardListView extends State<RewardList> {
     );
   }
 
-  Widget buildRewards(List<Reward> rewards) => ListView.builder(
-        itemCount: rewards.length,
-        itemBuilder: (context, index) {
-          final reward = rewards[index];
-          return Card(
-            child: ListTile(
-              leading: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: const Color(0xffE5E5E5),
-                  ),
-                  color: const Color(0xffE5E5E5),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
-                  ),
+  Widget buildRewards(List<Reward> rewards) => rewards.isEmpty
+      ? const SpinKitPouringHourGlassRefined(
+          color: Colors.green,
+        )
+      : ListView.builder(
+          itemCount: rewards.length,
+          itemBuilder: (context, index) {
+            final reward = rewards[index];
+            return Card(
+              child: ListTile(
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: reward.url.isNotEmpty
+                      ? Image.network(
+                          reward.url,
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.fill,
+                        )
+                      : Image.asset(
+                          "images/holding-img.png",
+                        ),
                 ),
-                child: Image.network(reward.url),
-              ),
-              title: Text(reward.name),
-              subtitle: Text(reward.points),
-              onTap: () {
-                Reward argument = Reward(
-                    name: reward.name,
-                    points: reward.points,
-                    pointsLabel: reward.pointsLabel,
-                    url: reward.url,
-                    uuid: reward.uuid,
-                    description: reward.description);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ClaimReward(
-                      rewardList: argument,
+                title: Text(reward.name),
+                subtitle: Text(reward.pointsLabel),
+                onTap: () {
+                  Reward argument = Reward(
+                      name: reward.name,
+                      points: reward.points,
+                      pointsLabel: reward.pointsLabel,
+                      url: reward.url,
+                      uuid: reward.uuid,
+                      description: reward.description);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ClaimReward(
+                        rewardList: argument,
+                      ),
                     ),
-                  ),
-                );
-
-                // Navigator.push(
-                //   context,
-                //   ClaimReward.tag,
-                //   arguments: Reward(
-                //     name: reward.name,
-                //     points: reward.points,
-                //     url: reward.url,
-                //     uuid: reward.uuid,
-                //   ),
-                // );
-              },
-            ),
-          );
-        },
-      );
+                  );
+                },
+              ),
+            );
+          },
+        );
 
   void getRewardList() async {
     var prefs = await SharedPreferences.getInstance();
@@ -142,19 +135,47 @@ class RewardListView extends State<RewardList> {
       print(responseData);
       if (responseData["status"] == "success") {
         List data = responseData["data"];
-        List rewardJson = [];
+        List firstTabRewardJson = [];
+        List secondTabRewardJson = [];
+        List thirdTabRewardJson = [];
         for (var item in data) {
-          rewardJson.add({
-            "uuid": item["uuid"],
-            "name": item["name"],
-            "points": item["points"],
-            "pointsLabel": myFormat.format(int.parse(item["points"])),
-            "url": item["thu"][0],
-            "description": item["description"]
-          });
+          print(item["col_name"]);
+          if (item["col_name"] == BaseConstants.firstTab) {
+            firstTabRewardJson.add({
+              "uuid": item["uuid"],
+              "name": item["name"],
+              "points": item["points"],
+              "pointsLabel": myFormat.format(int.parse(item["points"])),
+              "url": item.containsKey("thu") ? item["thu"][0] : "",
+              "description": item["description"]
+            });
+          } else if (item["col_name"] == BaseConstants.secondTab) {
+            secondTabRewardJson.add({
+              "uuid": item["uuid"],
+              "name": item["name"],
+              "points": item["points"],
+              "pointsLabel": myFormat.format(int.parse(item["points"])),
+              "url": item.containsKey("thu") ? item["thu"][0] : "",
+              "description": item["description"]
+            });
+          } else {
+            thirdTabRewardJson.add({
+              "uuid": item["uuid"],
+              "name": item["name"],
+              "points": item["points"],
+              "pointsLabel": myFormat.format(int.parse(item["points"])),
+              "url": item.containsKey("thu") ? item["thu"][0] : "",
+              "description": item["description"]
+            });
+          }
         }
         setState(() {
-          rewardList = rewardJson.map<Reward>(Reward.fromJson).toList();
+          firstTabRewardList =
+              firstTabRewardJson.map<Reward>(Reward.fromJson).toList();
+          secondTabRewardList =
+              secondTabRewardJson.map<Reward>(Reward.fromJson).toList();
+          thirdTabRewardList =
+              thirdTabRewardJson.map<Reward>(Reward.fromJson).toList();
         });
       }
     }

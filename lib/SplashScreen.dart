@@ -25,17 +25,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.green,
-        child: const Center(
-          child: Text(
-            "Lumineux Reward",
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-            ),
-          ),
+      body: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Image.asset(
+          "images/splash.jpg",
+          fit: BoxFit.cover,
         ),
       ),
     );
@@ -48,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
       uuidValue = prefs.getString("uuid")!;
     }
 
-    Timer(const Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 3), () {
       if (uuidValue.isNotEmpty) {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const Dashboard()));

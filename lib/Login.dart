@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lumineux_rewards_app/BaseConstants.dart';
 import 'package:lumineux_rewards_app/Dashboard.dart';
 import 'package:http/http.dart' as http;
@@ -18,16 +19,18 @@ class _LoginState extends State<Login> {
   String? _username;
   String? _password;
 
+  bool? waitingForApiResponse = false;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    const logo = Hero(
+    var logo = const Hero(
       tag: 'hero',
-      child: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        radius: 48.0,
-        child: FlutterLogo(),
+      child: Center(
+        child: CircleAvatar(
+          backgroundImage: AssetImage("images/app_icon.png"),
+        ),
       ),
     );
 
@@ -90,6 +93,10 @@ class _LoginState extends State<Login> {
             if (isValid) {
               _formKey.currentState!.save();
 
+              setState(() {
+                waitingForApiResponse = true;
+              });
+
               var parameters = "/0/${_username!}/${_password!}";
               http.Response response = await http.get(Uri.parse(
                   BaseConstants.baseUrl +
@@ -110,12 +117,17 @@ class _LoginState extends State<Login> {
                   await prefs.setString('mobile', data["mobile"]);
                   await prefs.setString('points', data["points"]);
                   await prefs.setString('address', data["address"]);
+                  await prefs.setString('company', data["comp_name"]);
                   await prefs.setString(
                       'reward_img', data["img"]["dash_banner_1"]);
                   print(prefs.getString('uuid'));
                   Navigator.of(context).pushNamed(Dashboard.tag);
                 }
                 //return responseToParent[{"success": false, "message": responseData["type"] }];
+              } else {
+                setState(() {
+                  waitingForApiResponse = false;
+                });
               }
             }
           },
@@ -129,31 +141,35 @@ class _LoginState extends State<Login> {
     );
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: Center(
-          child: ListView(
-            shrinkWrap: true,
-            padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-            children: [
-              logo,
-              const SizedBox(
-                height: 48.0,
+      body: waitingForApiResponse == true
+          ? const SpinKitPouringHourGlassRefined(
+              color: Colors.green,
+            )
+          : Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Center(
+                child: ListView(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+                  children: [
+                    logo,
+                    const SizedBox(
+                      height: 48.0,
+                    ),
+                    username,
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    password,
+                    const SizedBox(
+                      height: 24.0,
+                    ),
+                    loginButton
+                  ],
+                ),
               ),
-              username,
-              const SizedBox(
-                height: 8.0,
-              ),
-              password,
-              const SizedBox(
-                height: 24.0,
-              ),
-              loginButton
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

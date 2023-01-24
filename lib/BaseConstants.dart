@@ -12,11 +12,18 @@ class BaseConstants {
   static const addReceiptLabel = "Add receipt";
   static const addProjectLabel = "Add project";
 
+  static const firstTab = "Obtainable now";
+  static const secondTab = "Latest";
+  static const thirdTab = "Ending Soon";
+
   static const baseUrl = "https://rewards.lumineux.co.uk/";
   static const baseStagingUrl = "https://rewards.lumineux.co.uk/";
   static const getInfoUrl = "api/get/user-info/";
   static const putClaimUrl = "api/put/claim-request/";
+  static const putUserInfoUrl = "api/put/user-info-update/";
   static const getRewardUrl = "api/get/rewards-available/";
+  static const getNotificationUrl = "api/get/notifications/";
+  static const updateNotificationUrl = "api/put/notification-update/";
   static const points = "points";
   static const uuid = "uuid";
   static const claimConfirmationDescription =
