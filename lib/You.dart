@@ -59,6 +59,10 @@ class YouForm extends State<You> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25.0),
               ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(width: 1, color: Colors.green),
+                borderRadius: BorderRadius.circular(25.0),
+              ),
             ),
             onSaved: (String? value) {
               _name = value!;
@@ -102,6 +106,10 @@ class YouForm extends State<You> {
                     const BorderSide(width: 1, color: Color(0xffd8d8d8)),
               ),
               border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(width: 1, color: Colors.green),
                 borderRadius: BorderRadius.circular(25.0),
               ),
             ),
@@ -148,6 +156,10 @@ class YouForm extends State<You> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25.0),
               ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(width: 1, color: Colors.green),
+                borderRadius: BorderRadius.circular(25.0),
+              ),
             ),
             onSaved: (String? value) {
               _mobile = value;
@@ -190,6 +202,10 @@ class YouForm extends State<You> {
                     const BorderSide(width: 1, color: Color(0xffd8d8d8)),
               ),
               border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(width: 1, color: Colors.green),
                 borderRadius: BorderRadius.circular(25.0),
               ),
             ),
@@ -237,6 +253,10 @@ class YouForm extends State<You> {
                     const BorderSide(width: 1, color: Color(0xffd8d8d8)),
               ),
               border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(width: 1, color: Colors.green),
                 borderRadius: BorderRadius.circular(25.0),
               ),
             ),
@@ -308,7 +328,23 @@ class YouForm extends State<You> {
                   if (!mounted) return;
 
                   var snackBar = SnackBar(
-                    content: Text(responseData["status_msg"]),
+                    content: Center(
+                      child: Text(
+                        responseData["status_msg"],
+                        style: const TextStyle(fontSize: 17.0),
+                      ),
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height - 100,
+                      right: 20,
+                      left: 20,
+                      bottom: 20,
+                    ),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   setState(() {
@@ -385,8 +421,8 @@ class YouForm extends State<You> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        RichText(
-                          text: TextSpan(
+                        Text.rich(
+                          TextSpan(
                             // Note: Styles for TextSpans must be explicitly defined.
                             // Child text spans will inherit styles from parent
                             style: const TextStyle(
@@ -405,17 +441,26 @@ class YouForm extends State<You> {
                             ],
                           ),
                         ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color(0xffabcc59), // Background color
+                                elevation: 0.0,
+                                backgroundColor: const Color(0xffabcc59),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                minimumSize:
+                                    const Size(150, 50), // Background color
                               ),
                               child: const Text(
                                 "Manage Password",
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 17.0),
                               ),
                               onPressed: () async {
                                 final url = Uri.parse(
@@ -432,12 +477,18 @@ class YouForm extends State<You> {
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color(0xffabcc59), // Background color
-                              ),
+                                  elevation: 0.0,
+                                  backgroundColor: const Color(0xffabcc59),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  minimumSize:
+                                      const Size(150, 50) // Background color
+                                  ),
                               child: const Text(
                                 "Logout",
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 17.0),
                               ),
                               onPressed: () async {
                                 SharedPreferences preferences =

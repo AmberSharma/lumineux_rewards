@@ -55,6 +55,10 @@ class _LoginState extends State<Login> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25.0),
         ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(width: 1, color: Colors.green),
+          borderRadius: BorderRadius.circular(25.0),
+        ),
       ),
       onSaved: (String? value) {
         setState(() {
@@ -82,6 +86,10 @@ class _LoginState extends State<Login> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25.0),
         ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(width: 1, color: Colors.green),
+          borderRadius: BorderRadius.circular(25.0),
+        ),
       ),
       onSaved: (String? value) {
         setState(() {
@@ -97,74 +105,81 @@ class _LoginState extends State<Login> {
 
     final loginButton = Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Material(
-        borderRadius: BorderRadius.circular(30.0),
-        shadowColor: Colors.lightBlueAccent.shade100,
-        //elevation: 5.0,
-        child: MaterialButton(
-          minWidth: 100.0,
-          height: 42.0,
-          onPressed: () async {
-            final isValid = _formKey.currentState!.validate();
+      child: MaterialButton(
+        onPressed: () async {
+          final isValid = _formKey.currentState!.validate();
 
-            if (isValid) {
-              _formKey.currentState!.save();
+          if (isValid) {
+            _formKey.currentState!.save();
 
+            setState(() {
+              waitingForApiResponse = true;
+            });
+
+            var parameters = "/0/${_username!}/${_password!}";
+            http.Response response = await http.get(Uri.parse(
+                BaseConstants.baseUrl + BaseConstants.getInfoUrl + parameters));
+
+            if (response.statusCode == 200) {
+              if (!mounted) return;
+              var responseData = jsonDecode(response.body);
+              var snackBar = SnackBar(
+                content: Center(
+                  child: Text(
+                    responseData["status_msg"],
+                    style: const TextStyle(fontSize: 17.0),
+                  ),
+                ),
+                behavior: SnackBarBehavior.floating,
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height - 100,
+                  right: 20,
+                  left: 20,
+                  bottom: 20,
+                ),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
               setState(() {
-                waitingForApiResponse = true;
+                waitingForApiResponse = false;
               });
+              print(responseData);
+              if (responseData["status"] == "success") {
+                var data = responseData["data"];
+                var prefs = await SharedPreferences.getInstance();
+                await prefs.setString('uuid', data["uuid"]);
+                await prefs.setString('user_name', data["username"]);
+                await prefs.setString('first_name', data["first_name"]);
+                await prefs.setString('last_name', data["last_name"]);
+                await prefs.setString('email', data["email"]);
+                await prefs.setString('mobile', data["mobile"]);
+                await prefs.setString('points', data["points"]);
+                await prefs.setString('address', data["address"]);
+                await prefs.setString('company', data["comp_name"]);
+                await prefs.setString(
+                    'reward_img', data["img"]["dash_banner_1"]);
 
-              var parameters = "/0/${_username!}/${_password!}";
-              http.Response response = await http.get(Uri.parse(
-                  BaseConstants.baseUrl +
-                      BaseConstants.getInfoUrl +
-                      parameters));
-
-              if (response.statusCode == 200) {
-                if (!mounted) return;
-                var responseData = jsonDecode(response.body);
-                var snackBar = SnackBar(
-                  content: Text(responseData["status_msg"]),
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const Dashboard(),
+                  ),
+                  (Route route) => false,
                 );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                setState(() {
-                  waitingForApiResponse = false;
-                });
-                print(responseData);
-                if (responseData["status"] == "success") {
-                  var data = responseData["data"];
-                  var prefs = await SharedPreferences.getInstance();
-                  await prefs.setString('uuid', data["uuid"]);
-                  await prefs.setString('user_name', data["username"]);
-                  await prefs.setString('first_name', data["first_name"]);
-                  await prefs.setString('last_name', data["last_name"]);
-                  await prefs.setString('email', data["email"]);
-                  await prefs.setString('mobile', data["mobile"]);
-                  await prefs.setString('points', data["points"]);
-                  await prefs.setString('address', data["address"]);
-                  await prefs.setString('company', data["comp_name"]);
-                  await prefs.setString(
-                      'reward_img', data["img"]["dash_banner_1"]);
-
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => const Dashboard(),
-                    ),
-                    (Route route) => false,
-                  );
-                }
-              } else {
-                setState(() {
-                  waitingForApiResponse = false;
-                });
               }
+            } else {
+              setState(() {
+                waitingForApiResponse = false;
+              });
             }
-          },
-          color: const Color(0xffabcc59),
-          child: const Text(
-            "Login",
-            style: TextStyle(color: Colors.white),
-          ),
+          }
+        },
+        color: const Color(0xffabcc59),
+        child: const Text(
+          "Login",
+          style: TextStyle(color: Colors.white),
         ),
       ),
     );

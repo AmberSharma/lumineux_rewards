@@ -48,9 +48,10 @@ class AddReceiptForm extends State<AddReceipt> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(25.0),
           ),
-          // focusedBorder: const OutlineInputBorder(
-          //   borderSide: BorderSide(width: 3, color: Colors.amberAccent),
-          // ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(width: 1, color: Colors.green),
+            borderRadius: BorderRadius.circular(25.0),
+          ),
         ),
         onSaved: (String? value) {
           _field_1 = value;
@@ -80,9 +81,10 @@ class AddReceiptForm extends State<AddReceipt> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(25.0),
           ),
-          // focusedBorder: OutlineInputBorder(
-          //   borderSide: BorderSide(width: 3, color: Colors.amberAccent),
-          // ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(width: 1, color: Colors.green),
+            borderRadius: BorderRadius.circular(25.0),
+          ),
         ),
         onSaved: (String? value) {
           _field_2 = value;
@@ -115,9 +117,10 @@ class AddReceiptForm extends State<AddReceipt> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(25.0),
           ),
-          // focusedBorder: const OutlineInputBorder(
-          //   borderSide: BorderSide(width: 3, color: Colors.amberAccent),
-          // ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(width: 1, color: Colors.green),
+            borderRadius: BorderRadius.circular(25.0),
+          ),
         ),
         onSaved: (String? value) {
           _description = value;
@@ -319,12 +322,18 @@ class AddReceiptForm extends State<AddReceipt> {
                       children: <Widget>[
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color(0xffabcc59), // Background color
+                            elevation: 0.0,
+                            backgroundColor: const Color(0xffabcc59),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            minimumSize:
+                                const Size(150, 50), // Background color
                           ),
                           child: const Text(
                             "Submit",
-                            style: TextStyle(color: Colors.white),
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 17.0),
                           ),
                           onPressed: () async {
                             final isValid = _formKey.currentState!.validate();
@@ -362,7 +371,26 @@ class AddReceiptForm extends State<AddReceipt> {
                                     if (!mounted) return;
 
                                     var snackBar = SnackBar(
-                                      content: Text(responseArr["status_msg"]),
+                                      content: Center(
+                                        child: Text(
+                                          responseArr["status_msg"],
+                                          style:
+                                              const TextStyle(fontSize: 17.0),
+                                        ),
+                                      ),
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: Colors.green,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                      margin: EdgeInsets.only(
+                                        top:
+                                            MediaQuery.of(context).size.height -
+                                                100,
+                                        right: 20,
+                                        left: 20,
+                                        bottom: 20,
+                                      ),
                                     );
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBar);
