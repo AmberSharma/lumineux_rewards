@@ -1,18 +1,23 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'BaseConstants.dart';
 import 'common/CommonAppBar.dart';
 import 'common/CommonBottomNavigationBar.dart';
 
 class Contactus extends StatelessWidget {
+  static String tag = "contactus";
   const Contactus({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CommonAppBar(),
+      appBar: CommonAppBar(
+        parentTag: Contactus.tag,
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -20,7 +25,7 @@ class Contactus extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 22.0),
             child: Text(
-              "Contact us",
+              BaseConstants.contactUsPageLabel,
               style: TextStyle(
                 fontSize: 25.0,
               ),
@@ -49,18 +54,29 @@ class Contactus extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24.0, 48.0, 0.0, 0.0),
                     child: RichText(
-                      text: const TextSpan(
+                      text: TextSpan(
                         // Note: Styles for TextSpans must be explicitly defined.
                         // Child text spans will inherit styles from parent
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 17.0,
                             color: Colors.black,
                             fontFamily: 'Montserrat'),
                         children: <TextSpan>[
-                          TextSpan(
+                          const TextSpan(
                               text: 'Phone: ',
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: "+44 (0)1507 328 031"),
+                          TextSpan(
+                            text: BaseConstants.phoneNumberLabel,
+                            style: const TextStyle(color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                final url = Uri.parse(
+                                    "tel:${BaseConstants.phoneNumberLabel}");
+                                if (await canLaunchUrl(url)) {
+                                  await launchUrl(url);
+                                }
+                              },
+                          ),
                         ],
                       ),
                     ),
@@ -72,18 +88,32 @@ class Contactus extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(24.0),
                     child: RichText(
-                      text: const TextSpan(
+                      text: TextSpan(
                         // Note: Styles for TextSpans must be explicitly defined.
                         // Child text spans will inherit styles from parent
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 17.0,
                             color: Colors.black,
                             fontFamily: 'Montserrat'),
                         children: <TextSpan>[
-                          TextSpan(
+                          const TextSpan(
                               text: 'Email: ',
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: "sales@lumineux.co.uk"),
+                          TextSpan(
+                            text: BaseConstants.emailLabel,
+                            style: const TextStyle(color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                //const toEmail = BaseConstants.emailLabel;
+                                final Uri url = Uri(
+                                  scheme: 'mailto',
+                                  path: BaseConstants.emailLabel,
+                                );
+                                if (await canLaunchUrl(url)) {
+                                  await launchUrl(url);
+                                }
+                              },
+                          ),
                         ],
                       ),
                     ),
@@ -95,18 +125,29 @@ class Contactus extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24.0, 0.0, 0.0, 0.0),
                     child: RichText(
-                      text: const TextSpan(
+                      text: TextSpan(
                         // Note: Styles for TextSpans must be explicitly defined.
                         // Child text spans will inherit styles from parent
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 17.0,
                             color: Colors.black,
                             fontFamily: 'Montserrat'),
                         children: <TextSpan>[
-                          TextSpan(
+                          const TextSpan(
                               text: 'Web: ',
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: "www.lumineux.co.uk"),
+                          TextSpan(
+                            text: BaseConstants.websiteLabel,
+                            style: const TextStyle(color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                final url = Uri.parse(
+                                    "https://${BaseConstants.websiteLabel}");
+                                if (await canLaunchUrl(url)) {
+                                  await launchUrl(url);
+                                }
+                              },
+                          ),
                         ],
                       ),
                     ),
@@ -136,9 +177,15 @@ class Contactus extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () async {
+                              final url =
+                                  Uri.parse(BaseConstants.facebookLabel);
+                              if (await canLaunchUrl(url)) {
+                                await launchUrl(url);
+                              }
+                            },
                             child: const Icon(
                               FontAwesomeIcons.facebookF,
                               size: 18.0,
@@ -146,9 +193,14 @@ class Contactus extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () async {
+                              final url = Uri.parse(BaseConstants.twitterLabel);
+                              if (await canLaunchUrl(url)) {
+                                await launchUrl(url);
+                              }
+                            },
                             child: const Icon(
                               FontAwesomeIcons.twitter,
                               size: 18.0,
@@ -156,9 +208,15 @@ class Contactus extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () async {
+                              final url =
+                                  Uri.parse(BaseConstants.linkedinLabel);
+                              if (await canLaunchUrl(url)) {
+                                await launchUrl(url);
+                              }
+                            },
                             child: const Icon(
                               FontAwesomeIcons.linkedinIn,
                               size: 18.0,
@@ -197,6 +255,37 @@ class Contactus extends StatelessWidget {
                       ],
                     ),
                   ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              GestureDetector(
+                onTap: () async {
+                  final url = Uri.parse(BaseConstants.privacyPolicyLink);
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url);
+                  }
+                },
+                child: const Text(
+                  BaseConstants.privacyPolicyLabel,
+                  style: TextStyle(
+                      decoration: TextDecoration.underline, color: Colors.blue),
+                ),
+              ),
+              GestureDetector(
+                onTap: () async {
+                  final url = Uri.parse(BaseConstants.termsOfUseLink);
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url);
+                  }
+                },
+                child: const Text(
+                  BaseConstants.termsOfUseLabel,
+                  style: TextStyle(
+                      decoration: TextDecoration.underline, color: Colors.blue),
                 ),
               ),
             ],

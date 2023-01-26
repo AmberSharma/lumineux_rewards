@@ -8,6 +8,7 @@ import 'common/CommonBottomNavigationBar.dart';
 import 'inc/Reward.dart';
 
 class ActionSuccess extends StatelessWidget {
+  static String tag = "action-success";
   final String description;
   const ActionSuccess({super.key, required this.description});
 
@@ -15,7 +16,9 @@ class ActionSuccess extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CommonAppBar(),
+      appBar: CommonAppBar(
+        parentTag: ActionSuccess.tag,
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

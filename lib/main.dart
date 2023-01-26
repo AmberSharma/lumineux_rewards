@@ -34,8 +34,8 @@ class _InitScreenState extends State<InitScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: <String, WidgetBuilder>{
-        Login.tag: (context) => const Login(),
-        Dashboard.tag: (context) => const Dashboard(),
+        Login.tag: (BuildContext context) => const Login(),
+        Dashboard.tag: (BuildContext context) => const Dashboard(),
       },
       theme: ThemeData(fontFamily: 'Montserrat'),
       home: const SplashScreen(),

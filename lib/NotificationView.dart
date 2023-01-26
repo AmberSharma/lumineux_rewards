@@ -15,6 +15,7 @@ import 'inc/Reward.dart';
 import 'package:http/http.dart' as http;
 
 class NotificationView extends StatefulWidget {
+  static String tag = "notification-view";
   const NotificationView({super.key});
 
   @override
@@ -27,60 +28,6 @@ class NotificationListView extends State<NotificationView> {
   NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
   List<NotificationData> notificationList = [];
 
-  // List<NotificationData> rewards = getJson();
-  //
-  // static List<NotificationData> getJson() {
-  //   const data = [
-  //     {
-  //       "name": "iPad Mini Test 1",
-  //       "date": "2023-01-15 10:00:00",
-  //       "description": "Test Description 1",
-  //     },
-  //     {
-  //       "name": "iPad Mini Test 2",
-  //       "date": "2023-01-15 10:00:00",
-  //       "description": "Test Description 2",
-  //     },
-  //     {
-  //       "name": "iPad Mini Test 1",
-  //       "date": "2023-01-15 10:00:00",
-  //       "description": "Test Description 1",
-  //     },
-  //     {
-  //       "name": "iPad Mini Test 2",
-  //       "date": "2023-01-15 10:00:00",
-  //       "description": "Test Description 2",
-  //     },
-  //     {
-  //       "name": "iPad Mini Test 1",
-  //       "date": "2023-01-15 10:00:00",
-  //       "description": "Test Description 1",
-  //     },
-  //     {
-  //       "name": "iPad Mini Test 2",
-  //       "date": "2023-01-15 10:00:00",
-  //       "description": "Test Description 2",
-  //     },
-  //     {
-  //       "name": "iPad Mini Test 2",
-  //       "date": "2023-01-15 10:00:00",
-  //       "description": "Test Description 2",
-  //     },
-  //     {
-  //       "name": "iPad Mini Test 1",
-  //       "date": "2023-01-15 10:00:00",
-  //       "description": "Test Description 1",
-  //     },
-  //     {
-  //       "name": "iPad Mini Test 2",
-  //       "date": "2023-01-15 10:00:00",
-  //       "description": "Test Description 2",
-  //     },
-  //   ];
-  //
-  //   return data.map<NotificationData>(NotificationData.fromJson).toList();
-  // }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -91,7 +38,9 @@ class NotificationListView extends State<NotificationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CommonAppBar(),
+      appBar: CommonAppBar(
+        parentTag: NotificationView.tag,
+      ),
       body: Column(
         children: [
           Padding(
@@ -106,20 +55,20 @@ class NotificationListView extends State<NotificationView> {
                   "Alerts",
                   style: TextStyle(fontSize: 22.0),
                 ),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    shape: const StadiumBorder(),
-                    backgroundColor: const Color(0xFFABCC59),
-                  ),
-                  child: const Text('Mark all as read'),
-                )
+                // ElevatedButton(
+                //   onPressed: () {},
+                //   style: ElevatedButton.styleFrom(
+                //     shape: const StadiumBorder(),
+                //     backgroundColor: const Color(0xFFABCC59),
+                //   ),
+                //   child: const Text('Mark all as read'),
+                // )
               ],
             ),
           ),
           Expanded(
               child: notificationList.isEmpty
-                  ? const SpinKitPouringHourGlassRefined(
+                  ? const SpinKitRing(
                       color: Colors.green,
                     )
                   : buildNotifications(notificationList)),
@@ -213,7 +162,6 @@ class NotificationListView extends State<NotificationView> {
 
     if (response.statusCode == 200) {
       var responseData = jsonDecode(response.body);
-      print(responseData);
       if (responseData["status"] == "success") {
         List data = responseData["data"];
         List notificationJson = [];
@@ -226,10 +174,11 @@ class NotificationListView extends State<NotificationView> {
             "read": item["read"]
           });
         }
+        var notificationListDummy = notificationJson
+            .map<NotificationData>(NotificationData.fromJson)
+            .toList();
         setState(() {
-          notificationList = notificationJson
-              .map<NotificationData>(NotificationData.fromJson)
-              .toList();
+          notificationList = notificationListDummy;
         });
       }
     }

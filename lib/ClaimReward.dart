@@ -11,9 +11,9 @@ import 'inc/Reward.dart';
 import 'package:http/http.dart' as http;
 
 class ClaimReward extends StatefulWidget {
+  static String tag = "claim-reward";
   final Reward rewardList;
   const ClaimReward({super.key, required this.rewardList});
-  //const ClaimReward({Key? key}) : super(key: key);
 
   @override
   State<ClaimReward> createState() => _ClaimRewardState();
@@ -41,28 +41,35 @@ class _ClaimRewardState extends State<ClaimReward> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
-          "Back to rewards",
+          "Back",
           style: TextStyle(fontSize: 14.0),
         ),
         backgroundColor: Colors.lightGreen[900],
-        actions: const [AppBarAction()],
+        actions: [
+          AppBarAction(
+            parentTag: ClaimReward.tag,
+          )
+        ],
       ),
       body: Container(
-        padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 20, right: 20),
         // alignment: Alignment.topCenter,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               flex: 2,
-              child: Text(
-                widget.rewardList.name,
-                style: const TextStyle(
-                    fontSize: 24.0, fontWeight: FontWeight.bold),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  widget.rewardList.name,
+                  style: const TextStyle(
+                      fontSize: 24.0, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
             Expanded(
-              flex: 5,
+              flex: 6,
               child: SizedBox.expand(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(25.0),
@@ -87,8 +94,9 @@ class _ClaimRewardState extends State<ClaimReward> {
                   child: Text(
                     widget.rewardList.description,
                     style: const TextStyle(
-                      fontSize: 14.0,
-                    ),
+                        fontSize: 17.0,
+                        // fontWeight: FontWeight.bold,
+                        height: 1.5),
                   ),
                 ),
               ),
@@ -121,6 +129,9 @@ class _ClaimRewardState extends State<ClaimReward> {
                                     "${widget.rewardList.pointsLabel} points"),
                           ],
                         ),
+                      ),
+                      const SizedBox(
+                        height: 10.0,
                       ),
                       RichText(
                         text: TextSpan(

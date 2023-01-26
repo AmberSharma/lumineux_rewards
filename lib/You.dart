@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lumineux_rewards_app/Dashboard.dart';
+import 'package:lumineux_rewards_app/Login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'BaseConstants.dart';
 import 'package:http/http.dart' as http;
 
@@ -35,11 +36,14 @@ class YouForm extends State<You> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              "Your name*",
-              style: TextStyle(fontSize: 16.0),
+          const Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Your name*",
+                style: TextStyle(fontSize: 16.0),
+              ),
             ),
           ),
           TextFormField(
@@ -48,14 +52,13 @@ class YouForm extends State<You> {
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 0, 0),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                borderSide: const BorderSide(width: 1, color: Colors.blueGrey),
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide:
+                    const BorderSide(width: 1, color: Color(0xffd8d8d8)),
               ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(25.0),
               ),
-              filled: true,
-              fillColor: Colors.white,
             ),
             onSaved: (String? value) {
               _name = value!;
@@ -77,11 +80,14 @@ class YouForm extends State<You> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              "Company*",
-              style: TextStyle(fontSize: 16.0),
+          const Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Company*",
+                style: TextStyle(fontSize: 16.0),
+              ),
             ),
           ),
           TextFormField(
@@ -90,11 +96,14 @@ class YouForm extends State<You> {
             initialValue: _company,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 0, 0),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide:
+                    const BorderSide(width: 1, color: Color(0xffd8d8d8)),
               ),
-              filled: true,
-              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
             ),
             onSaved: (String? value) {
               _company = value;
@@ -116,11 +125,14 @@ class YouForm extends State<You> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              "Phone number*",
-              style: TextStyle(fontSize: 16.0),
+          const Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Phone number*",
+                style: TextStyle(fontSize: 16.0),
+              ),
             ),
           ),
           TextFormField(
@@ -128,11 +140,14 @@ class YouForm extends State<You> {
             initialValue: _mobile,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 0, 0),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide:
+                    const BorderSide(width: 1, color: Color(0xffd8d8d8)),
               ),
-              //filled: true,
-              //fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
             ),
             onSaved: (String? value) {
               _mobile = value;
@@ -154,11 +169,14 @@ class YouForm extends State<You> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              "Email address*",
-              style: TextStyle(fontSize: 16.0),
+          const Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Email address*",
+                style: TextStyle(fontSize: 16.0),
+              ),
             ),
           ),
           TextFormField(
@@ -166,11 +184,14 @@ class YouForm extends State<You> {
             initialValue: _email,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 0, 0),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide:
+                    const BorderSide(width: 1, color: Color(0xffd8d8d8)),
               ),
-              filled: true,
-              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
             ),
             onSaved: (String? value) {
               _email = value;
@@ -192,11 +213,14 @@ class YouForm extends State<You> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              "Delivery address*",
-              style: TextStyle(fontSize: 16.0),
+          const Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Delivery address*",
+                style: TextStyle(fontSize: 16.0),
+              ),
             ),
           ),
           TextFormField(
@@ -207,11 +231,14 @@ class YouForm extends State<You> {
             initialValue: _address,
             decoration: InputDecoration(
               // contentPadding: EdgeInsets.zero,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide:
+                    const BorderSide(width: 1, color: Color(0xffd8d8d8)),
               ),
-              filled: true,
-              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
             ),
             onSaved: (String? value) {
               _address = value;
@@ -237,6 +264,7 @@ class YouForm extends State<You> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
@@ -312,7 +340,7 @@ class YouForm extends State<You> {
         ],
       ),
       body: apiCall == 1
-          ? const SpinKitPouringHourGlassRefined(
+          ? const SpinKitRing(
               color: Colors.green,
             )
           : Form(
@@ -335,7 +363,7 @@ class YouForm extends State<You> {
                     ],
                   ),
                   Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: CustomScrollView(
                       slivers: [
                         SliverFillRemaining(
@@ -377,22 +405,55 @@ class YouForm extends State<You> {
                             ],
                           ),
                         ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color(0xffabcc59), // Background color
-                          ),
-                          child: const Text(
-                            "Manage Password",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () async {
-                            // final isValid = _formKey.currentState!.validate();
-                            //
-                            // if (isValid) {
-                            //   _formKey.currentState!.save();
-                            // }
-                          },
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    const Color(0xffabcc59), // Background color
+                              ),
+                              child: const Text(
+                                "Manage Password",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () async {
+                                final url = Uri.parse(
+                                  BaseConstants.managePasswordLink
+                                      .replaceAll("{username}", _userName!),
+                                );
+                                if (await canLaunchUrl(url)) {
+                                  await launchUrl(url);
+                                }
+                              },
+                            ),
+                            const SizedBox(
+                              width: 20.0,
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    const Color(0xffabcc59), // Background color
+                              ),
+                              child: const Text(
+                                "Logout",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () async {
+                                SharedPreferences preferences =
+                                    await SharedPreferences.getInstance();
+                                await preferences.clear();
+
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const Login(),
+                                  ),
+                                  (Route route) => false,
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -415,7 +476,5 @@ class YouForm extends State<You> {
       _company = prefs.getString("company")!;
       _address = prefs.getString("address")!;
     });
-
-    print(_name);
   }
 }

@@ -45,7 +45,9 @@ class _InitScreenState extends State<InitScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CommonAppBar(),
+      appBar: CommonAppBar(
+        parentTag: Dashboard.tag,
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [

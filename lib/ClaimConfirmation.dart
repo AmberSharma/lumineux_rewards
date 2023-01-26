@@ -15,7 +15,7 @@ class ClaimConfirmation extends StatefulWidget {
   final String itemUuid;
   final String userPoints;
 
-  ClaimConfirmation(
+  const ClaimConfirmation(
       {super.key,
       required this.userUuid,
       required this.itemUuid,
@@ -38,7 +38,7 @@ class _ClaimConfirmationState extends State<ClaimConfirmation> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: apiCall == 1
-              ? const SpinKitPouringHourGlassRefined(
+              ? const SpinKitRing(
                   color: Colors.white,
                 )
               : Column(

@@ -11,6 +11,7 @@ import 'BaseConstants.dart';
 import 'package:http/http.dart' as http;
 
 class AddReceipt extends StatefulWidget {
+  static String tag = "add-receipt";
   const AddReceipt({super.key});
 
   @override
@@ -35,21 +36,21 @@ class AddReceiptForm extends State<AddReceipt> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: TextFormField(
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(12.0, 12.0, 0, 0),
           hintText: 'Tap here to enter a wholesaler',
           labelText: 'Wholesaler *',
-          hintStyle: TextStyle(color: Colors.grey),
+          hintStyle: const TextStyle(color: Colors.grey),
           enabledBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(width: 3, color: Colors.greenAccent), //<-- SEE HERE
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 3, color: Colors.amberAccent),
+            borderRadius: BorderRadius.circular(25.0),
+            borderSide: const BorderSide(width: 1, color: Color(0xffd8d8d8)),
           ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.circular(25.0),
           ),
+          // focusedBorder: const OutlineInputBorder(
+          //   borderSide: BorderSide(width: 3, color: Colors.amberAccent),
+          // ),
         ),
         onSaved: (String? value) {
           _field_1 = value;
@@ -67,21 +68,21 @@ class AddReceiptForm extends State<AddReceipt> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: TextFormField(
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(12.0, 12.0, 0, 0),
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0),
           hintText: 'Tap here to enter a town/city',
           labelText: 'Town/City *',
-          hintStyle: TextStyle(color: Colors.grey),
+          hintStyle: const TextStyle(color: Colors.grey),
           enabledBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(width: 3, color: Colors.greenAccent), //<-- SEE HERE
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 3, color: Colors.amberAccent),
+            borderRadius: BorderRadius.circular(25.0),
+            borderSide: const BorderSide(width: 1, color: Color(0xffd8d8d8)),
           ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.circular(25.0),
           ),
+          // focusedBorder: OutlineInputBorder(
+          //   borderSide: BorderSide(width: 3, color: Colors.amberAccent),
+          // ),
         ),
         onSaved: (String? value) {
           _field_2 = value;
@@ -102,21 +103,21 @@ class AddReceiptForm extends State<AddReceipt> {
         minLines: 5,
         maxLines: 5,
         keyboardType: TextInputType.multiline,
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(12.0, 12.0, 0, 0),
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0),
           hintText: 'Tap here to enter a description',
           labelText: 'Description *',
-          hintStyle: TextStyle(color: Colors.grey),
+          hintStyle: const TextStyle(color: Colors.grey),
           enabledBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(width: 3, color: Colors.greenAccent), //<-- SEE HERE
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 3, color: Colors.amberAccent),
+            borderRadius: BorderRadius.circular(25.0),
+            borderSide: const BorderSide(width: 1, color: Color(0xffd8d8d8)),
           ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.circular(25.0),
           ),
+          // focusedBorder: const OutlineInputBorder(
+          //   borderSide: BorderSide(width: 3, color: Colors.amberAccent),
+          // ),
         ),
         onSaved: (String? value) {
           _description = value;
@@ -143,10 +144,14 @@ class AddReceiptForm extends State<AddReceipt> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen[900],
-        actions: const [AppBarAction()],
+        actions: [
+          AppBarAction(
+            parentTag: AddReceipt.tag,
+          )
+        ],
       ),
       body: apiCall == 1
-          ? const SpinKitPouringHourGlassRefined(
+          ? const SpinKitRing(
               color: Colors.green,
             )
           : Form(
@@ -159,10 +164,9 @@ class AddReceiptForm extends State<AddReceipt> {
                     child: Row(
                       children: const [
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 16.0, horizontal: 24.0),
+                          padding: EdgeInsets.symmetric(horizontal: 24.0),
                           child: Text(
-                            "Add a Receipt",
+                            BaseConstants.addReceiptPageLabel,
                             style: TextStyle(
                               fontSize: 28.0,
                             ),

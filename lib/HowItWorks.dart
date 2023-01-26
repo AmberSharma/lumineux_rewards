@@ -5,13 +5,16 @@ import 'common/CommonAppBar.dart';
 import 'common/CommonBottomNavigationBar.dart';
 
 class HowItWorks extends StatelessWidget {
+  static String tag = "how-it-works";
   const HowItWorks({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CommonAppBar(),
+      appBar: CommonAppBar(
+        parentTag: HowItWorks.tag,
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

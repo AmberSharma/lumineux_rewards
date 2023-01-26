@@ -7,7 +7,8 @@ import 'AppBarAction.dart';
 import 'LeadingAppBar.dart';
 
 class CommonAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const CommonAppBar({Key? key}) : super(key: key);
+  final String parentTag;
+  const CommonAppBar({super.key, required this.parentTag});
 
   @override
   State<CommonAppBar> createState() => _CommonAppBarState();
@@ -23,7 +24,11 @@ class _CommonAppBarState extends State<CommonAppBar> {
     return AppBar(
       leading: const LeadingAppBar(),
       backgroundColor: Colors.lightGreen[900],
-      actions: const [AppBarAction()],
+      actions: [
+        AppBarAction(
+          parentTag: widget.parentTag,
+        )
+      ],
     );
   }
 }

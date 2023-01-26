@@ -13,6 +13,7 @@ import 'inc/Reward.dart';
 import 'package:http/http.dart' as http;
 
 class RewardList extends StatefulWidget {
+  static String tag = "reward-list";
   const RewardList({super.key});
 
   @override
@@ -43,7 +44,11 @@ class RewardListView extends State<RewardList> {
         appBar: AppBar(
           leading: const LeadingAppBar(),
           backgroundColor: Colors.lightGreen[900],
-          actions: const [AppBarAction()],
+          actions: [
+            AppBarAction(
+              parentTag: RewardList.tag,
+            )
+          ],
           bottom: const TabBar(
             labelPadding: EdgeInsets.symmetric(horizontal: 2.0),
             tabs: <Widget>[
@@ -78,7 +83,7 @@ class RewardListView extends State<RewardList> {
   }
 
   Widget buildRewards(List<Reward> rewards) => rewards.isEmpty
-      ? const SpinKitPouringHourGlassRefined(
+      ? const SpinKitRing(
           color: Colors.green,
         )
       : ListView.builder(

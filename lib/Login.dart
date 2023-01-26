@@ -7,6 +7,7 @@ import 'package:lumineux_rewards_app/Dashboard.dart';
 import 'package:http/http.dart' as http;
 import 'package:lumineux_rewards_app/inc/UserInfo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -25,23 +26,34 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    var logo = const Hero(
+    var logo = Hero(
       tag: 'hero',
       child: Center(
         child: CircleAvatar(
-          backgroundImage: AssetImage("images/app_icon.png"),
+          radius: 80,
+          // backgroundImage: AssetImage("images/login-logo.png"),
+          backgroundColor: Colors.transparent,
+          child: Image.asset(
+            "images/login-logo.png",
+            fit: BoxFit.fill,
+          ),
         ),
       ),
     );
 
     final username = TextFormField(
+      textAlign: TextAlign.center,
       autofocus: false,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         hintText: "Username",
         contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(25.0),
+          borderSide: const BorderSide(width: 1, color: Color(0xffd8d8d8)),
+        ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
+          borderRadius: BorderRadius.circular(25.0),
         ),
       ),
       onSaved: (String? value) {
@@ -57,13 +69,18 @@ class _LoginState extends State<Login> {
     );
 
     final password = TextFormField(
+      textAlign: TextAlign.center,
       autofocus: false,
       obscureText: true,
       decoration: InputDecoration(
         hintText: "Password",
         contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(25.0),
+          borderSide: const BorderSide(width: 1, color: Color(0xffd8d8d8)),
+        ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
+          borderRadius: BorderRadius.circular(25.0),
         ),
       ),
       onSaved: (String? value) {
@@ -104,8 +121,16 @@ class _LoginState extends State<Login> {
                       parameters));
 
               if (response.statusCode == 200) {
+                if (!mounted) return;
                 var responseData = jsonDecode(response.body);
-
+                var snackBar = SnackBar(
+                  content: Text(responseData["status_msg"]),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                setState(() {
+                  waitingForApiResponse = false;
+                });
+                print(responseData);
                 if (responseData["status"] == "success") {
                   var data = responseData["data"];
                   var prefs = await SharedPreferences.getInstance();
@@ -120,10 +145,14 @@ class _LoginState extends State<Login> {
                   await prefs.setString('company', data["comp_name"]);
                   await prefs.setString(
                       'reward_img', data["img"]["dash_banner_1"]);
-                  print(prefs.getString('uuid'));
-                  Navigator.of(context).pushNamed(Dashboard.tag);
+
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const Dashboard(),
+                    ),
+                    (Route route) => false,
+                  );
                 }
-                //return responseToParent[{"success": false, "message": responseData["type"] }];
               } else {
                 setState(() {
                   waitingForApiResponse = false;
@@ -142,31 +171,51 @@ class _LoginState extends State<Login> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: waitingForApiResponse == true
-          ? const SpinKitPouringHourGlassRefined(
+          ? const SpinKitRing(
               color: Colors.green,
             )
           : Form(
               key: _formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Center(
-                child: ListView(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-                  children: [
-                    logo,
-                    const SizedBox(
-                      height: 48.0,
-                    ),
-                    username,
-                    const SizedBox(
-                      height: 8.0,
-                    ),
-                    password,
-                    const SizedBox(
-                      height: 24.0,
-                    ),
-                    loginButton
-                  ],
+                child: SizedBox(
+                  width: 300,
+                  child: ListView(
+                    shrinkWrap: true,
+                    // padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+                    children: [
+                      logo,
+                      const SizedBox(
+                        height: 48.0,
+                      ),
+                      username,
+                      const SizedBox(
+                        height: 8.0,
+                      ),
+                      password,
+                      const SizedBox(
+                        height: 24.0,
+                      ),
+                      loginButton,
+                      Center(
+                        child: GestureDetector(
+                          onTap: () async {
+                            final url =
+                                Uri.parse(BaseConstants.manageAccountLink);
+                            if (await canLaunchUrl(url)) {
+                              await launchUrl(url);
+                            }
+                          },
+                          child: const Text(
+                            BaseConstants.manageAccountLabel,
+                            style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Colors.blue),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
