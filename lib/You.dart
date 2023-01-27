@@ -291,10 +291,10 @@ class YouForm extends State<You> {
           onPressed: () => Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const Dashboard())),
         ),
-        title: const Text(
-          "Cancel",
-          style: TextStyle(fontSize: 14.0),
-        ),
+        // title: const Text(
+        //   "Cancel",
+        //   style: TextStyle(fontSize: 14.0),
+        // ),
         backgroundColor: Colors.lightGreen[900],
         actions: [
           TextButton.icon(
@@ -405,6 +405,7 @@ class YouForm extends State<You> {
                         SliverFillRemaining(
                           hasScrollBody: false,
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               _buildNameField(),
                               _buildCompanyField(),

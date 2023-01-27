@@ -29,7 +29,7 @@ class ActionSuccess extends StatelessWidget {
             child: Text(
               description,
               style: const TextStyle(
-                fontSize: 25.0,
+                fontSize: 17.0,
               ),
             ),
           ),
@@ -41,6 +41,11 @@ class ActionSuccess extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(150, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      elevation: 0.0,
                       backgroundColor:
                           const Color(0xffabcc59), // Background color
                     ),

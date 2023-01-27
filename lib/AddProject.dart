@@ -233,10 +233,15 @@ class AddProjectForm extends State<AddProject> {
                                     child: SizedBox.fromSize(
                                       size: const Size.fromRadius(
                                           10), // Image radius
-                                      child: Image.file(
-                                        File(file),
-                                        fit: BoxFit.fill,
-                                      ),
+                                      child: file == "notAnImage"
+                                          ? Image.asset(
+                                              "images/pdf-icon.jpg",
+                                              fit: BoxFit.fill,
+                                            )
+                                          : Image.file(
+                                              File(file),
+                                              fit: BoxFit.fill,
+                                            ),
                                     ),
                                   ),
                                 ),
@@ -272,9 +277,19 @@ class AddProjectForm extends State<AddProject> {
                                         'png'
                                       ],
                                     ))!;
+                                    var imageExtensions = [
+                                      'jpg',
+                                      'png',
+                                      'jpeg'
+                                    ];
                                     filesPicked.files.forEach((element) {
                                       setState(() {
-                                        files.add(element.path.toString());
+                                        if (!imageExtensions
+                                            .contains(element.extension)) {
+                                          files.add("notAnImage");
+                                        } else {
+                                          files.add(element.path.toString());
+                                        }
                                         _platformFile.add(element);
                                       });
                                     });

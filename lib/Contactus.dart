@@ -259,36 +259,49 @@ class Contactus extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              GestureDetector(
-                onTap: () async {
-                  final url = Uri.parse(BaseConstants.privacyPolicyLink);
-                  if (await canLaunchUrl(url)) {
-                    await launchUrl(url);
-                  }
-                },
-                child: const Text(
-                  BaseConstants.privacyPolicyLabel,
-                  style: TextStyle(
-                      decoration: TextDecoration.underline, color: Colors.blue),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Policies: ",
+                  style: TextStyle(fontSize: 17.0),
                 ),
-              ),
-              GestureDetector(
-                onTap: () async {
-                  final url = Uri.parse(BaseConstants.termsOfUseLink);
-                  if (await canLaunchUrl(url)) {
-                    await launchUrl(url);
-                  }
-                },
-                child: const Text(
-                  BaseConstants.termsOfUseLabel,
-                  style: TextStyle(
-                      decoration: TextDecoration.underline, color: Colors.blue),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: GestureDetector(
+                    onTap: () async {
+                      final url = Uri.parse(BaseConstants.privacyPolicyLink);
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url);
+                      }
+                    },
+                    child: const Text(
+                      BaseConstants.privacyPolicyLabel,
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.blue),
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                GestureDetector(
+                  onTap: () async {
+                    final url = Uri.parse(BaseConstants.termsOfUseLink);
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url);
+                    }
+                  },
+                  child: const Text(
+                    BaseConstants.termsOfUseLabel,
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.blue),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

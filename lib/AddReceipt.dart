@@ -106,9 +106,9 @@ class AddReceiptForm extends State<AddReceipt> {
         maxLines: 5,
         keyboardType: TextInputType.multiline,
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0),
+          contentPadding: const EdgeInsets.fromLTRB(12.0, 20.0, 0, 0),
           hintText: 'Tap here to enter a description',
-          labelText: 'Description *',
+          labelText: 'Description',
           hintStyle: const TextStyle(color: Colors.grey),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(25.0),
@@ -125,11 +125,11 @@ class AddReceiptForm extends State<AddReceipt> {
         onSaved: (String? value) {
           _description = value;
         },
-        validator: (String? value) {
-          if (value!.isEmpty) {
-            return "Description is required";
-          }
-        },
+        // validator: (String? value) {
+        //   if (value!.isEmpty) {
+        //     return "Description is required";
+        //   }
+        // },
       ),
     );
   }
@@ -228,10 +228,15 @@ class AddReceiptForm extends State<AddReceipt> {
                                     child: SizedBox.fromSize(
                                       size: const Size.fromRadius(
                                           10), // Image radius
-                                      child: Image.file(
-                                        File(file),
-                                        fit: BoxFit.fill,
-                                      ),
+                                      child: file == "notAnImage"
+                                          ? Image.asset(
+                                              "images/pdf-icon.jpg",
+                                              fit: BoxFit.fill,
+                                            )
+                                          : Image.file(
+                                              File(file),
+                                              fit: BoxFit.fill,
+                                            ),
                                     ),
                                   ),
                                 ),
@@ -267,9 +272,21 @@ class AddReceiptForm extends State<AddReceipt> {
                                         'png'
                                       ],
                                     ))!;
+                                    var imageExtensions = [
+                                      'jpg',
+                                      'png',
+                                      'jpeg'
+                                    ];
                                     filesPicked.files.forEach((element) {
+                                      print(element.extension);
                                       setState(() {
-                                        files.add(element.path.toString());
+                                        if (!imageExtensions
+                                            .contains(element.extension)) {
+                                          files.add("notAnImage");
+                                        } else {
+                                          files.add(element.path.toString());
+                                        }
+                                        print(files);
                                         _platformFile.add(element);
                                       });
                                     });
@@ -367,6 +384,7 @@ class AddReceiptForm extends State<AddReceipt> {
                                   final responseJson =
                                       await response.stream.bytesToString();
                                   final responseArr = json.decode(responseJson);
+                                  print(responseArr);
                                   if (response.statusCode == 200) {
                                     if (!mounted) return;
 
