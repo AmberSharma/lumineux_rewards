@@ -40,11 +40,11 @@ class _ClaimRewardState extends State<ClaimReward> {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
-          "Back",
-          style: TextStyle(fontSize: 14.0),
-        ),
-        backgroundColor: Colors.lightGreen[900],
+        // title: const Text(
+        //   "Back",
+        //   style: TextStyle(fontSize: 14.0),
+        // ),
+        backgroundColor: const Color(0xff338c2e),
         actions: [
           AppBarAction(
             parentTag: ClaimReward.tag,
@@ -89,14 +89,18 @@ class _ClaimRewardState extends State<ClaimReward> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 10.0, vertical: 15.0),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Text(
-                    widget.rewardList.description,
-                    style: const TextStyle(
-                        fontSize: 17.0,
-                        // fontWeight: FontWeight.bold,
-                        height: 1.5),
+                child: RawScrollbar(
+                  thumbColor: Colors.green,
+                  thumbVisibility: true,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Text(
+                      widget.rewardList.description,
+                      style: const TextStyle(
+                          fontSize: 17.0,
+                          // fontWeight: FontWeight.bold,
+                          height: 1.5),
+                    ),
                   ),
                 ),
               ),
@@ -126,7 +130,7 @@ class _ClaimRewardState extends State<ClaimReward> {
                             ),
                             TextSpan(
                                 text:
-                                    "${widget.rewardList.pointsLabel} points"),
+                                    "${widget.rewardList.pointsLabel} ${BaseConstants.pointsSmallLabel}"),
                           ],
                         ),
                       ),
@@ -149,7 +153,8 @@ class _ClaimRewardState extends State<ClaimReward> {
                                   color: Colors.lightGreen),
                             ),
                             TextSpan(
-                              text: "$pointsLabel ${BaseConstants.pointsLabel}",
+                              text:
+                                  "$pointsLabel ${BaseConstants.pointsSmallLabel}",
                             ),
                           ],
                         ),
@@ -162,17 +167,25 @@ class _ClaimRewardState extends State<ClaimReward> {
             Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0, vertical: 10.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                 child: Center(
                   child: Column(
                     children: [
-                      int.parse(widget.rewardList.points) > int.parse(points)
+                      widget.rewardList.points.isEmpty ||
+                              points.isEmpty ||
+                              (int.parse(widget.rewardList.points) >
+                                  int.parse(points))
                           ? Container()
                           : ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                textStyle: const TextStyle(fontSize: 20),
-                                backgroundColor: const Color(0xFFABCC59),
+                                elevation: 0.0,
+                                backgroundColor: const Color(0xffabcc59),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                minimumSize:
+                                    const Size(150, 50), // Background color
                               ),
                               onPressed: () async {
                                 await showCustomDialogPopup<String?>(

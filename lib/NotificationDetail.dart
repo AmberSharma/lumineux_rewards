@@ -44,11 +44,11 @@ class NotificationDetailView extends State<NotificationDetail> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => const NotificationView()))),
-        title: const Text(
-          "Back to alerts",
-          style: TextStyle(fontSize: 14.0),
-        ),
-        backgroundColor: Colors.lightGreen[900],
+        // title: const Text(
+        //   "Back to alerts",
+        //   style: TextStyle(fontSize: 14.0),
+        // ),
+        backgroundColor: const Color(0xff338c2e),
         actions: [
           AppBarAction(
             parentTag: NotificationDetail.tag,

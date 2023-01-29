@@ -29,6 +29,7 @@ class _AppBarActionState extends State<AppBarAction> {
       IconButton(
         icon: const Icon(
           Icons.notifications,
+          color: Colors.white,
           size: 30.0,
         ),
         onPressed: () {

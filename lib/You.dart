@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:lumineux_rewards_app/CustomSnackBar.dart';
 import 'package:lumineux_rewards_app/Dashboard.dart';
 import 'package:lumineux_rewards_app/Login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -295,7 +296,7 @@ class YouForm extends State<You> {
         //   "Cancel",
         //   style: TextStyle(fontSize: 14.0),
         // ),
-        backgroundColor: Colors.lightGreen[900],
+        backgroundColor: const Color(0xff338c2e),
         actions: [
           TextButton.icon(
             icon: const Text(
@@ -326,27 +327,9 @@ class YouForm extends State<You> {
                 if (response.statusCode == 200) {
                   var responseData = jsonDecode(response.body);
                   if (!mounted) return;
+                  CustomSnackBar(data: responseData["status_msg"])
+                      .showSnackBar(context);
 
-                  var snackBar = SnackBar(
-                    content: Center(
-                      child: Text(
-                        responseData["status_msg"],
-                        style: const TextStyle(fontSize: 17.0),
-                      ),
-                    ),
-                    behavior: SnackBarBehavior.floating,
-                    backgroundColor: Colors.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    margin: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height - 100,
-                      right: 20,
-                      left: 20,
-                      bottom: 20,
-                    ),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   setState(() {
                     apiCall = 0;
                   });

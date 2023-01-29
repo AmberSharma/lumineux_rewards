@@ -9,6 +9,8 @@ import 'package:lumineux_rewards_app/inc/UserInfo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'CustomSnackBar.dart';
+
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
   static String tag = "login-page";
@@ -123,26 +125,9 @@ class _LoginState extends State<Login> {
             if (response.statusCode == 200) {
               if (!mounted) return;
               var responseData = jsonDecode(response.body);
-              var snackBar = SnackBar(
-                content: Center(
-                  child: Text(
-                    responseData["status_msg"],
-                    style: const TextStyle(fontSize: 17.0),
-                  ),
-                ),
-                behavior: SnackBarBehavior.floating,
-                backgroundColor: Colors.green,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height - 100,
-                  right: 20,
-                  left: 20,
-                  bottom: 20,
-                ),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              CustomSnackBar(data: responseData["status_msg"])
+                  .showSnackBar(context);
+
               setState(() {
                 waitingForApiResponse = false;
               });

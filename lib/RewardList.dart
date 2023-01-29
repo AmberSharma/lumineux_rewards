@@ -43,7 +43,7 @@ class RewardListView extends State<RewardList> {
       child: Scaffold(
         appBar: AppBar(
           leading: const LeadingAppBar(),
-          backgroundColor: Colors.lightGreen[900],
+          backgroundColor: const Color(0xff338c2e),
           actions: [
             AppBarAction(
               parentTag: RewardList.tag,
@@ -115,6 +115,8 @@ class RewardListView extends State<RewardList> {
                       url: reward.url,
                       uuid: reward.uuid,
                       description: reward.description);
+
+                  print(argument.points);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -133,6 +135,7 @@ class RewardListView extends State<RewardList> {
     var prefs = await SharedPreferences.getInstance();
     var uuid = prefs.getString(BaseConstants.uuid)!;
     var url = BaseConstants.baseUrl + BaseConstants.getRewardUrl + uuid;
+    print(url);
     http.Response response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {

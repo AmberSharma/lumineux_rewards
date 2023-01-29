@@ -23,7 +23,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       leading: const LeadingAppBar(),
-      backgroundColor: Colors.lightGreen[900],
+      backgroundColor: const Color(0xff338c2e),
       actions: [
         AppBarAction(
           parentTag: widget.parentTag,

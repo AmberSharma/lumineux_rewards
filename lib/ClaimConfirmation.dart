@@ -6,11 +6,13 @@ import 'package:lumineux_rewards_app/AddProject.dart';
 import 'package:lumineux_rewards_app/AddReceipt.dart';
 import 'package:lumineux_rewards_app/BaseConstants.dart';
 import 'package:http/http.dart' as http;
+import 'package:lumineux_rewards_app/common/AppBarAction.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ActionSuccess.dart';
 
 class ClaimConfirmation extends StatefulWidget {
+  static String tag = "claim-confirmation";
   final String userUuid;
   final String itemUuid;
   final String userPoints;
@@ -50,8 +52,8 @@ class _ClaimConfirmationState extends State<ClaimConfirmation> {
                       children: <Widget>[
                         ElevatedButton.icon(
                           onPressed: () => Navigator.of(context).pop(),
-                          icon: const Icon(Icons.arrow_left_sharp),
-                          label: const Text('Cancel'),
+                          icon: const Icon(Icons.arrow_back_ios_new),
+                          label: const Text(''),
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
                             backgroundColor: Colors.transparent,
@@ -59,11 +61,7 @@ class _ClaimConfirmationState extends State<ClaimConfirmation> {
                         ),
                         Column(
                           children: [
-                            IconButton(
-                              icon: const Icon(Icons.add_alert),
-                              color: Colors.white,
-                              onPressed: () {},
-                            ),
+                            AppBarAction(parentTag: ClaimConfirmation.tag)
                           ],
                         )
                       ],
@@ -94,8 +92,13 @@ class _ClaimConfirmationState extends State<ClaimConfirmation> {
                                 ),
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    textStyle: const TextStyle(fontSize: 20),
-                                    backgroundColor: const Color(0xFFABCC59),
+                                    elevation: 0.0,
+                                    backgroundColor: const Color(0xffabcc59),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    minimumSize:
+                                        const Size(150, 50), // Background color
                                   ),
                                   onPressed: () async {
                                     setState(() {
@@ -124,12 +127,14 @@ class _ClaimConfirmationState extends State<ClaimConfirmation> {
                                         await prefs.setString('points',
                                             responseData["status_value"]);
 
+                                        if (!mounted) return;
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => ActionSuccess(
-                                                description: BaseConstants
-                                                    .claimSubmitSuccess),
+                                            builder: (context) =>
+                                                const ActionSuccess(
+                                                    description: BaseConstants
+                                                        .claimSubmitSuccess),
                                           ),
                                         );
                                       } else {

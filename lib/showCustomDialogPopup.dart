@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 // Convenient method for easily display a top modal
 // Here we can customize more
-Future<T?> showCustomDialogPopup<T>(BuildContext context, Widget child) {
-  return showGeneralDialog<T?>(
+Future<dynamic> showCustomDialogPopup<T>(BuildContext context, Widget child) {
+  return showGeneralDialog<dynamic>(
     context: context,
     barrierDismissible: true,
     transitionDuration: const Duration(milliseconds: 250),

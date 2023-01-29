@@ -6,6 +6,7 @@ import 'package:lumineux_rewards_app/HowItWorks.dart';
 import 'package:lumineux_rewards_app/showCustomDialogPopup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'AddReceiptProject.dart';
+import 'common/AppBarAction.dart';
 import 'common/CommonAppBar.dart';
 import 'package:lumineux_rewards_app/BaseConstants.dart';
 import 'common/CommonBottomNavigationBar.dart';
@@ -45,9 +46,27 @@ class _InitScreenState extends State<InitScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CommonAppBar(
-        parentTag: Dashboard.tag,
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Image.asset(
+              'images/lumineux-logo-white.png',
+              fit: BoxFit.contain,
+              height: 32,
+            ),
+          ],
+        ),
+        backgroundColor: const Color(0xff338c2e),
+        actions: [
+          AppBarAction(
+            parentTag: Dashboard.tag,
+          )
+        ],
       ),
+      // appBar: CommonAppBar(
+      //   parentTag: Dashboard.tag,
+      // ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -56,17 +75,21 @@ class _InitScreenState extends State<InitScreen> {
             children: [
               Column(
                 children: [
-                  IconButton(
-                    icon: Image.asset('images/icon-receipt.png'),
-                    iconSize: 100.0,
-                    color: Colors.green,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AddReceipt()),
-                      );
-                    },
+                  Column(
+                    children: [
+                      IconButton(
+                        icon: Image.asset('images/icon-receipt.png'),
+                        iconSize: 100.0,
+                        color: Colors.green,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AddReceipt()),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                   const Text(BaseConstants.addReceiptLabel),
                 ],

@@ -1,16 +1,19 @@
 class BaseConstants {
   static const viewRewardsLabel = "View rewards";
   static const claimPointsLabel = "Claim rewards";
-  static const howItWorksLabel = "How it works";
+  static const howItWorksLabel = "How it Works";
   static const contactUsLabel = "Contact";
   static const contactUsPageLabel = "Contact us";
   static const youLabel = "You";
   static const homeLabel = "Home";
   static const pointsLabel = "Points";
+  static const pointsSmallLabel = "points";
   static const obtainableNowLabel = "Obtainable Now";
   static const latestLabel = "Latest";
   static const allLabel = "All";
   static const addReceiptLabel = "Add receipt";
+  static const addAFileLabel = "Add a file";
+  static const addFromCameraLabel = "Add from camera";
   static const addProjectLabel = "Add project";
   static const manageAccountLabel = "Manage/setup your account";
   static const addReceiptPageLabel = "Add a Receipt";
@@ -68,18 +71,18 @@ class BaseConstants {
   static const points = "points";
   static const uuid = "uuid";
   static const claimConfirmationDescription =
-      "Click 'Confirm' to claim this reward now. Your new points balance will be {points} points";
+      "Click 'Confirm' to claim this reward now. Your new points balance will be {points} points.";
   static const addReceiptDescription =
-      "Add at-least 1 image of your receipt, below. Add a description, then tap 'Submit' to send it to Lumineux. You will receive your points once validated.";
+      "Add at-least one receipt by tapping the '+' below, then tap 'Submit' to send for verification.";
   static const contactusDescription =
       "We're always happy to hear from you. If you have an enquiry that you'd like one of our team to help you with, just give us a call on the number below, or fill in the 'Send us a message' form on our website.";
   static const addProjectDescription =
-      "Add at-least 1 image of your project, below. Add a name, date and description, then tap 'Submit' to send it to Lumineux. You will receive your points once validated.";
+      "Add at-least one image of your project, by tapping the '+' below. Add a project name, date and description then tap 'Submit' to send for verification.";
 
   static const receiptSubmitSuccess =
       "Thank you for submitting your receipt. All receipts are validated by one of our team, which can take 24 hours during the working week. Your points will be updated automatically once this has been done.";
   static const projectSubmitSuccess =
-      "Thank you for submitting your project. All receipts are validated by one of our team, which can take 24 hours during the working week. Your points will be updated automatically once this has been done.";
+      "Thank you for submitting your project. All projects are validated by one of our team, which can take 24 hours during the working week. Your points will be updated automatically once this has been done.";
   static const claimSubmitSuccess =
-      "Your claim request has been submitted. We will get back to you in some time.";
+      "Your claim request was submitted successfully. You will be notified when your reward has been processed.";
 }

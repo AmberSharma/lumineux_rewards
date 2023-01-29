@@ -50,8 +50,8 @@ class NotificationListView extends State<NotificationView> {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
+              children: const [
+                Text(
                   "Alerts",
                   style: TextStyle(fontSize: 22.0),
                 ),

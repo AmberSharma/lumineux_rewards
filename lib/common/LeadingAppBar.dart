@@ -13,7 +13,7 @@ class LeadingAppBar extends StatelessWidget {
       builder: (BuildContext context) {
         return IconButton(
           icon: const Icon(
-            Icons.home_filled,
+            Icons.arrow_back_ios_new,
           ),
           iconSize: 30.0,
           // onPressed: () async {
