@@ -2,10 +2,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lumineux_rewards_app/common/AppBarAction.dart';
 
 import 'BaseConstants.dart';
 
 class FilePickerOrCamera extends StatefulWidget {
+  static String tag = "file-camera";
   const FilePickerOrCamera({Key? key}) : super(key: key);
 
   @override
@@ -35,7 +37,7 @@ class _FilePickerOrCameraState extends State<FilePickerOrCamera> {
                       children: <Widget>[
                         ElevatedButton.icon(
                           onPressed: () => Navigator.of(context).pop(),
-                          icon: const Icon(Icons.arrow_left_sharp),
+                          icon: const Icon(Icons.arrow_back_ios_new),
                           label: const Text(''),
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -44,11 +46,7 @@ class _FilePickerOrCameraState extends State<FilePickerOrCamera> {
                         ),
                         Column(
                           children: [
-                            IconButton(
-                              icon: const Icon(Icons.add_alert),
-                              color: Colors.white,
-                              onPressed: () {},
-                            ),
+                            AppBarAction(parentTag: FilePickerOrCamera.tag)
                           ],
                         )
                       ],

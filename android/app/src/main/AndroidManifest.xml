@@ -21,7 +21,7 @@
        </intent>
    </queries>
    <application
-        android:label="lumineux Rewards"
+        android:label="Lumineux Rewards"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

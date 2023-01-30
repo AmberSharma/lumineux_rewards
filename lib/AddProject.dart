@@ -198,14 +198,15 @@ class AddProjectForm extends State<AddProject> {
           : Form(
               key: _formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Column(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Row(
+              child: SingleChildScrollView(
+                reverse: true,
+                child: Column(
+                  children: [
+                    Row(
                       children: const [
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 24.0),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 24.0, vertical: 10.0),
                           child: Text(
                             BaseConstants.addProjectPageLabel,
                             style: TextStyle(
@@ -215,16 +216,13 @@ class AddProjectForm extends State<AddProject> {
                         ),
                       ],
                     ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Row(
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
                         Expanded(
                           child: Padding(
                             padding: EdgeInsets.symmetric(
-                                horizontal: 24.0, vertical: 5.0),
+                                horizontal: 24.0, vertical: 10.0),
                             child: Text(
                               BaseConstants.addProjectDescription,
                               style: TextStyle(
@@ -235,18 +233,17 @@ class AddProjectForm extends State<AddProject> {
                         ),
                       ],
                     ),
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: GridView.count(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
                             primary: false,
                             padding:
-                                const EdgeInsets.fromLTRB(20, 0.0, 20.0, 0.0),
+                                const EdgeInsets.fromLTRB(20, 10.0, 20.0, 10.0),
                             crossAxisSpacing: 15,
                             mainAxisSpacing: 12,
                             crossAxisCount: 4,
@@ -282,25 +279,27 @@ class AddProjectForm extends State<AddProject> {
                                                 ),
                                         ),
                                       ),
-                                      Positioned(
-                                        bottom: 30,
-                                        left: 30,
-                                        child: IconButton(
-                                          icon: const Icon(
-                                            Icons.cancel,
-                                            size: 25.0,
-                                            color: Colors.green,
-                                          ),
-                                          onPressed: () {
-                                            var fileIndex = files.indexOf(file);
-                                            setState(() {
-                                              files.removeAt(fileIndex);
-                                              _platformFile.removeAt(fileIndex);
-                                            });
-                                            print(files);
-                                            print(_platformFile);
-                                          },
-                                        ),
+                                      Align(
+                                        alignment: Alignment.topRight,
+                                        child: Container(
+                                            padding: EdgeInsets.zero,
+                                            height: 30,
+                                            width: 30,
+                                            child: GestureDetector(
+                                                onTap: () {
+                                                  var fileIndex =
+                                                      files.indexOf(file);
+                                                  setState(() {
+                                                    files.removeAt(fileIndex);
+                                                    _platformFile
+                                                        .removeAt(fileIndex);
+                                                  });
+                                                },
+                                                child: const Icon(
+                                                  Icons.cancel,
+                                                  color: Colors.green,
+                                                  size: 30.0,
+                                                ))),
                                       )
                                     ],
                                   ),
@@ -349,7 +348,7 @@ class AddProjectForm extends State<AddProject> {
 
                                       filesPicked.files.forEach((element) {
                                         setState(() {
-                                          print(files.length);
+                                          // print(files.length);
                                           if (files.length == 7) {
                                             const CustomSnackBar(
                                                     data:
@@ -399,27 +398,15 @@ class AddProjectForm extends State<AddProject> {
                         ),
                       ],
                     ),
-                  ),
-                  Expanded(
-                    flex: 8,
-                    child: CustomScrollView(
-                      slivers: [
-                        SliverFillRemaining(
-                            hasScrollBody: false,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _buildNameField(),
-                                _buildDateField(),
-                                _buildDescriptionField(),
-                              ],
-                            )),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildNameField(),
+                        _buildDateField(),
+                        _buildDescriptionField(),
                       ],
                     ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Padding(
@@ -456,9 +443,9 @@ class AddProjectForm extends State<AddProject> {
                                   request.fields['field_1'] = _field_1!;
                                   request.fields['field_2'] =
                                       DateFormat.yMMMEd().format(_field_2!);
-                                  print(request.fields['field_1']);
-                                  print(request.fields['field_2']);
-                                  print(request.fields['type']);
+                                  // print(request.fields['field_1']);
+                                  // print(request.fields['field_2']);
+                                  // print(request.fields['type']);
                                   request.fields['description'] = _description!;
                                   if (_platformFile.isNotEmpty) {
                                     _platformFile
@@ -503,8 +490,8 @@ class AddProjectForm extends State<AddProject> {
                         ),
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
     );

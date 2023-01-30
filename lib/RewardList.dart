@@ -116,7 +116,7 @@ class RewardListView extends State<RewardList> {
                       uuid: reward.uuid,
                       description: reward.description);
 
-                  print(argument.points);
+                  // print(argument.points);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -135,19 +135,19 @@ class RewardListView extends State<RewardList> {
     var prefs = await SharedPreferences.getInstance();
     var uuid = prefs.getString(BaseConstants.uuid)!;
     var url = BaseConstants.baseUrl + BaseConstants.getRewardUrl + uuid;
-    print(url);
+    // print(url);
     http.Response response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       var responseData = jsonDecode(response.body);
-      print(responseData);
+      // print(responseData);
       if (responseData["status"] == "success") {
         List data = responseData["data"];
         List firstTabRewardJson = [];
         List secondTabRewardJson = [];
         List thirdTabRewardJson = [];
         for (var item in data) {
-          print(item["col_name"]);
+          // print(item["col_name"]);
           if (item["col_name"] == BaseConstants.firstTab) {
             firstTabRewardJson.add({
               "uuid": item["uuid"],

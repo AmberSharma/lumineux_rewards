@@ -174,42 +174,6 @@ class AddReceiptForm extends State<AddReceipt> {
     );
   }
 
-  // Widget _buildDescriptionField() {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(horizontal: 24.0),
-  //     child: TextFormField(
-  //       minLines: 5,
-  //       maxLines: 5,
-  //       keyboardType: TextInputType.multiline,
-  //       decoration: InputDecoration(
-  //         contentPadding: const EdgeInsets.fromLTRB(12.0, 20.0, 0, 0),
-  //         hintText: 'Tap here to enter a description',
-  //         labelText: 'Description',
-  //         hintStyle: const TextStyle(color: Colors.grey),
-  //         enabledBorder: OutlineInputBorder(
-  //           borderRadius: BorderRadius.circular(25.0),
-  //           borderSide: const BorderSide(width: 1, color: Color(0xffd8d8d8)),
-  //         ),
-  //         border: OutlineInputBorder(
-  //           borderRadius: BorderRadius.circular(25.0),
-  //         ),
-  //         focusedBorder: OutlineInputBorder(
-  //           borderSide: const BorderSide(width: 1, color: Colors.green),
-  //           borderRadius: BorderRadius.circular(25.0),
-  //         ),
-  //       ),
-  //       onSaved: (String? value) {
-  //         _description = value;
-  //       },
-  //       // validator: (String? value) {
-  //       //   if (value!.isEmpty) {
-  //       //     return "Description is required";
-  //       //   }
-  //       // },
-  //     ),
-  //   );
-  // }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -221,6 +185,7 @@ class AddReceiptForm extends State<AddReceipt> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // resizeToAvoidBottomInset: false,
       appBar: CommonAppBar(
         parentTag: AddReceipt.tag,
       ),
@@ -231,14 +196,16 @@ class AddReceiptForm extends State<AddReceipt> {
           : Form(
               key: _formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Column(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Row(
+              child: SingleChildScrollView(
+                reverse: true,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
                       children: const [
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 24.0),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 24.0, vertical: 10.0),
                           child: Text(
                             BaseConstants.addReceiptPageLabel,
                             style: TextStyle(
@@ -248,15 +215,13 @@ class AddReceiptForm extends State<AddReceipt> {
                         ),
                       ],
                     ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Row(
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 24.0),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 24.0, vertical: 10.0),
                             child: Text(
                               BaseConstants.addReceiptDescription,
                               style: TextStyle(
@@ -267,190 +232,149 @@ class AddReceiptForm extends State<AddReceipt> {
                         ),
                       ],
                     ),
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    GridView.count(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      primary: false,
+                      padding: const EdgeInsets.all(20),
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      crossAxisCount: 4,
                       children: [
-                        Expanded(
-                          child: GridView.count(
-                            primary: false,
-                            padding: const EdgeInsets.all(20),
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            crossAxisCount: 4,
+                        ...files.map(
+                          (file) => Stack(
+                            fit: StackFit.expand,
+                            // alignment: AlignmentDirectional.topEnd,
                             children: [
-                              ...files.map(
-                                (file) => Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: const Color(0xffE5E5E5),
-                                    ),
-                                    color: const Color(0xffE5E5E5),
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                  ),
-                                  child: Stack(
-                                    fit: StackFit.expand,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                            10), // Image border
-                                        child: SizedBox.fromSize(
-                                          size: const Size.fromRadius(
-                                              10), // Image radius
-                                          child: file == "notAnImage"
-                                              ? Image.asset(
-                                                  "images/pdf-icon.jpg",
-                                                  fit: BoxFit.fill,
-                                                )
-                                              : Image.file(
-                                                  File(file),
-                                                  fit: BoxFit.cover,
-                                                ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        bottom: 30,
-                                        left: 30,
-                                        child: IconButton(
-                                          icon: const Icon(
-                                            Icons.cancel,
-                                            size: 25.0,
-                                            color: Colors.green,
-                                          ),
-                                          onPressed: () {
-                                            var fileIndex = files.indexOf(file);
-                                            setState(() {
-                                              files.removeAt(fileIndex);
-                                              _platformFile.removeAt(fileIndex);
-                                            });
-                                            print(files);
-                                            print(_platformFile);
-                                          },
-                                        ),
+                              ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(10), // Image border
+                                child: file == "notAnImage"
+                                    ? Image.asset(
+                                        "images/pdf-icon.jpg",
+                                        fit: BoxFit.fill,
                                       )
-                                    ],
-                                  ),
-                                ),
+                                    : Image.file(
+                                        File(file),
+                                        fit: BoxFit.cover,
+                                      ),
                               ),
-                              Container(
-                                height: 60.0,
-                                width: 60.0,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: const Color(0xffE5E5E5),
-                                  ),
-                                  color: const Color(0xffE5E5E5),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                ),
-                                child: IconButton(
-                                  padding: EdgeInsets.zero,
-                                  iconSize: 50.0,
-                                  icon: const Icon(
-                                    Icons.add,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () async {
-                                    var allowedExtensions = [
-                                      'jpg',
-                                      'pdf',
-                                      'jpeg',
-                                      'png'
-                                    ];
-                                    var imageExtensions = [
-                                      'jpg',
-                                      'png',
-                                      'jpeg'
-                                    ];
-
-                                    final filesList =
-                                        await showCustomDialogPopup<String?>(
-                                            context,
-                                            const FilePickerOrCamera());
-                                    //print(filesList);
-                                    if (filesList[0]['name'] == "file") {
-                                      FilePickerResult filesPicked =
-                                          filesList[0]['data'];
-
-                                      filesPicked.files.forEach((element) {
-                                        setState(() {
-                                          print(files.length);
-                                          if (files.length == 7) {
-                                            const CustomSnackBar(
-                                                    data:
-                                                        "Maximum 7 files can be added")
-                                                .showSnackBar(context);
-                                          } else {
-                                            if (allowedExtensions
-                                                .contains(element.extension)) {
-                                              if (!imageExtensions.contains(
-                                                  element.extension)) {
-                                                files.add("notAnImage");
-                                              } else {
-                                                files.add(
-                                                    element.path.toString());
-                                              }
-                                              _platformFile.add(element);
-                                            } else {
-                                              const CustomSnackBar(
-                                                      data:
-                                                          "Only .jpg, .jpeg, .png and .pdf are allowed")
-                                                  .showSnackBar(context);
-                                            }
-                                          }
-                                        });
-                                      });
-                                    }
-
-                                    if (filesList[0]['name'] == "camera") {
-                                      final file = filesList[0]["data"];
-                                      setState(() {
-                                        if (files.length == 7) {
-                                          const CustomSnackBar(
-                                                  data:
-                                                      "Maximum 7 files can be added")
-                                              .showSnackBar(context);
-                                        } else {
-                                          files.add(file.path.toString());
-                                          _platformFile.add(file);
-                                        }
-                                      });
-                                    }
-                                  },
-                                ),
-                              ),
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Container(
+                                    padding: EdgeInsets.zero,
+                                    height: 30,
+                                    width: 30,
+                                    child: GestureDetector(
+                                        onTap: () {
+                                          var fileIndex = files.indexOf(file);
+                                          setState(() {
+                                            files.removeAt(fileIndex);
+                                            _platformFile.removeAt(fileIndex);
+                                          });
+                                        },
+                                        child: const Icon(
+                                          Icons.cancel,
+                                          color: Colors.green,
+                                          size: 30.0,
+                                        ))),
+                              )
                             ],
+                          ),
+                        ),
+                        Container(
+                          height: 60.0,
+                          width: 60.0,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: const Color(0xffE5E5E5),
+                            ),
+                            color: const Color(0xffE5E5E5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            iconSize: 50.0,
+                            icon: const Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
+                            onPressed: () async {
+                              var allowedExtensions = [
+                                'jpg',
+                                'pdf',
+                                'jpeg',
+                                'png'
+                              ];
+                              var imageExtensions = ['jpg', 'png', 'jpeg'];
+
+                              final filesList =
+                                  await showCustomDialogPopup<String?>(
+                                      context, const FilePickerOrCamera());
+                              //print(filesList);
+                              if (filesList[0]['name'] == "file") {
+                                FilePickerResult filesPicked =
+                                    filesList[0]['data'];
+
+                                filesPicked.files.forEach((element) {
+                                  setState(() {
+                                    // print(files.length);
+                                    if (files.length == 7) {
+                                      const CustomSnackBar(
+                                              data:
+                                                  "Maximum 7 files can be added")
+                                          .showSnackBar(context);
+                                    } else {
+                                      if (allowedExtensions
+                                          .contains(element.extension)) {
+                                        if (!imageExtensions
+                                            .contains(element.extension)) {
+                                          files.add("notAnImage");
+                                        } else {
+                                          files.add(element.path.toString());
+                                        }
+                                        _platformFile.add(element);
+                                      } else {
+                                        const CustomSnackBar(
+                                                data:
+                                                    "Only .jpg, .jpeg, .png and .pdf are allowed")
+                                            .showSnackBar(context);
+                                      }
+                                    }
+                                  });
+                                });
+                              }
+
+                              if (filesList[0]['name'] == "camera") {
+                                final file = filesList[0]["data"];
+                                setState(() {
+                                  if (files.length == 7) {
+                                    const CustomSnackBar(
+                                            data:
+                                                "Maximum 7 files can be added")
+                                        .showSnackBar(context);
+                                  } else {
+                                    files.add(file.path.toString());
+                                    _platformFile.add(file);
+                                  }
+                                });
+                              }
+                            },
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  Expanded(
-                    flex: 9,
-                    child: CustomScrollView(
-                      slivers: [
-                        SliverFillRemaining(
-                            hasScrollBody: false,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _buildWholesalerField(),
-                                _buildAreaField(),
-                                _buildDescriptionField(),
-                              ],
-                            )),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildWholesalerField(),
+                        _buildAreaField(),
+                        _buildDescriptionField(),
                       ],
                     ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Padding(
@@ -479,7 +403,7 @@ class AddReceiptForm extends State<AddReceipt> {
                                 });
                                 _formKey.currentState!.save();
                                 if (uuid.isNotEmpty) {
-                                  print(uuid);
+                                  // print(uuid);
                                   var uri = Uri.parse(
                                       "${BaseConstants.baseUrl}api/put/points-request/$uuid/");
                                   var request =
@@ -503,7 +427,7 @@ class AddReceiptForm extends State<AddReceipt> {
                                         await response.stream.bytesToString();
                                     final responseArr =
                                         json.decode(responseJson);
-                                    print(responseArr);
+                                    // print(responseArr);
                                     if (response.statusCode == 200) {
                                       if (!mounted) return;
                                       CustomSnackBar(
@@ -517,9 +441,10 @@ class AddReceiptForm extends State<AddReceipt> {
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => ActionSuccess(
-                                                description: BaseConstants
-                                                    .receiptSubmitSuccess),
+                                            builder: (context) =>
+                                                const ActionSuccess(
+                                                    description: BaseConstants
+                                                        .receiptSubmitSuccess),
                                           ),
                                         );
                                       }
@@ -532,8 +457,8 @@ class AddReceiptForm extends State<AddReceipt> {
                         ),
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
     );
