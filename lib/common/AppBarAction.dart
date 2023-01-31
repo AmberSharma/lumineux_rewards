@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:lumineux_rewards_app/common/CommonBottomNavigationBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../BaseConstants.dart';
@@ -79,6 +80,7 @@ class _AppBarActionState extends State<AppBarAction> {
       if (response.statusCode == 200) {
         var responseData = jsonDecode(response.body);
         if (responseData["status"] == "success") {
+          await prefs.setString('points', responseData["points"]);
           List data = responseData["data"];
           for (var item in data) {
             if (int.parse(item["read"]) == 0) {

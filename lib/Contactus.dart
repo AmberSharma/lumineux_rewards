@@ -267,7 +267,7 @@ class Contactus extends StatelessWidget {
               children: [
                 const Text(
                   "Policies: ",
-                  style: TextStyle(fontSize: 17.0),
+                  style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),

@@ -1,9 +1,10 @@
 class BaseConstants {
   static const viewRewardsLabel = "View rewards";
   static const claimPointsLabel = "Claim rewards";
-  static const howItWorksLabel = "How it Works";
+  static const howItWorksPageLabel = "How it Works";
+  static const howItWorksLabel = "How it works";
   static const contactUsLabel = "Contact";
-  static const contactUsPageLabel = "Contact us";
+  static const contactUsPageLabel = "Contact Us";
   static const youLabel = "You";
   static const homeLabel = "Home";
   static const pointsLabel = "Points";
@@ -58,7 +59,7 @@ class BaseConstants {
 
   static const firstTab = "Obtainable now";
   static const secondTab = "Latest";
-  static const thirdTab = "Ending Soon";
+  static const thirdTab = "Ending soon";
 
   static const baseUrl = "https://rewards.lumineux.co.uk/";
   static const baseStagingUrl = "https://rewards.lumineux.co.uk/";
