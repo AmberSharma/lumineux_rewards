@@ -3,12 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:lumineux_rewards_app/ClaimConfirmation.dart';
 import 'package:lumineux_rewards_app/showCustomDialogPopup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'AddReceiptProject.dart';
 import 'BaseConstants.dart';
 import 'common/AppBarAction.dart';
 import 'inc/Reward.dart';
-import 'package:http/http.dart' as http;
 
 class ClaimReward extends StatefulWidget {
   static String tag = "claim-reward";

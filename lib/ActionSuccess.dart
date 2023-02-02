@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumineux_rewards_app/Dashboard.dart';
-
-import 'BaseConstants.dart';
 import 'common/CommonAppBar.dart';
 import 'common/CommonBottomNavigationBar.dart';
-import 'inc/Reward.dart';
 
 class ActionSuccess extends StatelessWidget {
   static String tag = "action-success";

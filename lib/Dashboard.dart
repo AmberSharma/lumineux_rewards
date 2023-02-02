@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lumineux_rewards_app/AddProject.dart';
 import 'package:lumineux_rewards_app/AddReceipt.dart';
-import 'package:lumineux_rewards_app/Contactus.dart';
 import 'package:lumineux_rewards_app/HowItWorks.dart';
-import 'package:lumineux_rewards_app/showCustomDialogPopup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'AddReceiptProject.dart';
 import 'common/AppBarAction.dart';
-import 'common/CommonAppBar.dart';
 import 'package:lumineux_rewards_app/BaseConstants.dart';
 import 'common/CommonBottomNavigationBar.dart';
 import 'RewardList.dart';

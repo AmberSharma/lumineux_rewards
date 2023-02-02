@@ -3,15 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
-import 'package:lumineux_rewards_app/ClaimReward.dart';
 import 'package:lumineux_rewards_app/NotificationDetail.dart';
 import 'package:lumineux_rewards_app/common/CommonAppBar.dart';
 import 'package:lumineux_rewards_app/common/CommonBottomNavigationBar.dart';
-import 'package:lumineux_rewards_app/common/LeadingAppBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'BaseConstants.dart';
 import 'inc/NotificationData.dart';
-import 'inc/Reward.dart';
 import 'package:http/http.dart' as http;
 
 class NotificationView extends StatefulWidget {

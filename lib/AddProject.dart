@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:lumineux_rewards_app/ActionSuccess.dart';
-import 'package:lumineux_rewards_app/You.dart';
-import 'package:lumineux_rewards_app/common/AppBarAction.dart';
 import 'package:lumineux_rewards_app/showCustomDialogPopup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'BaseConstants.dart';

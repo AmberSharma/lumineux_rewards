@@ -5,7 +5,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lumineux_rewards_app/BaseConstants.dart';
 import 'package:lumineux_rewards_app/Dashboard.dart';
 import 'package:http/http.dart' as http;
-import 'package:lumineux_rewards_app/inc/UserInfo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
